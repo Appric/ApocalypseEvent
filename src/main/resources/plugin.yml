@@ -1,0 +1,7 @@
+name: ApocalypseEvent
+version: '${version}'
+
+main: approt.apocalypseEvent.ApocalypseEvent
+api-version: '26.1'
+
+authors: [ approt ]
