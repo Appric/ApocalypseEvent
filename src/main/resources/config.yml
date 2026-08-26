@@ -4,3 +4,4 @@ enabled: true # Sets whether the plugin is enabled or not
 undried-blocks: # List of blocks that can only be placed next to each other
   - DIRT
   - GRASS_BLOCK
+limit-water: true # Sets whether you can only place water next to undried blocks or not
