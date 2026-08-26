@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class ApocalypseEvent extends JavaPlugin {
 
@@ -25,6 +26,12 @@ public final class ApocalypseEvent extends JavaPlugin {
         // Save and load config
         saveDefaultConfig();
         loadConfigValues();
+
+        // Register the command
+        Objects.requireNonNull(getCommand("apocalypseevent")).setExecutor(new ApocalypseEventCommand(this));
+
+        // Register the tab completer
+        Objects.requireNonNull(getCommand("apocalypseevent")).setTabCompleter(new ApocalypseEventTabCompleter());
 
         // Register listeners
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);

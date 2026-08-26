@@ -5,3 +5,19 @@ main: approt.apocalypseEvent.ApocalypseEvent
 api-version: '26.1'
 
 authors: [ approt ]
+
+commands:
+  apocalypseevent:
+    description: The primary command for the ApocalypseEvent plugin.
+    aliases: [ae,apoc,apocalypse]
+    permission: apocalypseevent
+    permission-message: You do not have permission to use that command!
+    usage: "Incorrect usage! Example: /<command> parameter"
+
+permissions:
+  apocalypseevent:
+    default: op
+    description: Parent permission for all ApocalypseEvent permissions.
+    children:
+      apocalypseevent.reload:
+        description: Allows players to reload the config with /apocalypseevent reload
