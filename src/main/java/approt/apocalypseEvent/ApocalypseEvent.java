@@ -1,6 +1,7 @@
 package approt.apocalypseEvent;
 
 import approt.apocalypseEvent.listeners.BlockPlaceListener;
+import approt.apocalypseEvent.listeners.BucketEmptyListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -27,6 +28,7 @@ public final class ApocalypseEvent extends JavaPlugin {
 
         // Register listeners
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
+        getServer().getPluginManager().registerEvents(new BucketEmptyListener(this), this);
     }
 
     // Loads the config values

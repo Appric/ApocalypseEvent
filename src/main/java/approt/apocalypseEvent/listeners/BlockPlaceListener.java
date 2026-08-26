@@ -42,7 +42,7 @@ public class BlockPlaceListener implements Listener {
         adjacentBlocks.add(block.getRelative(BlockFace.WEST));
 
         // Checks if any adjacent blocks are a valid type
-        if(plugin.undriedBlocks.contains(material) || (plugin.limitWater && material == Material.WATER))
+        if(plugin.undriedBlocks.contains(material))
         {
             for(Block adjacentBlock : adjacentBlocks)
             {
