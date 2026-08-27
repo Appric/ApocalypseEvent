@@ -2,9 +2,9 @@ package approt.apocalypseEvent;
 
 import approt.apocalypseEvent.listeners.BlockPlaceListener;
 import approt.apocalypseEvent.listeners.BucketEmptyListener;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import approt.apocalypseEvent.listeners.PlayerMoveListener;
+import org.bukkit.*;
+import org.bukkit.block.Biome;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean enabled;
     public Boolean limitWater;
     public List<Material> undriedBlocks = new ArrayList<>();
+    public List<Biome> freezingBiomes = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -36,6 +37,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         // Register listeners
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
         getServer().getPluginManager().registerEvents(new BucketEmptyListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerMoveListener(this), this);
     }
 
     // Loads the config values
@@ -53,6 +55,14 @@ public final class ApocalypseEvent extends JavaPlugin {
             Material material = Material.matchMaterial(name);
             if(material != null && material.isBlock())
                 undriedBlocks.add(material);
+        }
+
+        // Converts biome names to biomes and puts them in the freezingBiomes list
+        freezingBiomes.clear();
+        for (String name : getConfig().getStringList("freezing-biomes")) {
+            Biome biome = Registry.BIOME.get(NamespacedKey.fromString(name));
+            if(biome != null)
+                freezingBiomes.add(biome);
         }
     }
 
