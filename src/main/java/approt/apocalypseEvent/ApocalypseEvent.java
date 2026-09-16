@@ -19,9 +19,11 @@ public final class ApocalypseEvent extends JavaPlugin {
 
     // Public variables
     public int heatThreshold;
+    public int deathMessageRange;
     public Boolean enabled;
     public Boolean limitWater;
     public Boolean heatEnabled;
+    public Boolean limitDeathMessages;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
@@ -59,13 +61,15 @@ public final class ApocalypseEvent extends JavaPlugin {
         // Reload config
         super.reloadConfig();
 
-        // Set public int
+        // Set public ints
         heatThreshold = getConfig().getInt("heat-threshold", 12);
+        deathMessageRange = getConfig().getInt("death-message-range", 20);
 
         // Set public Booleans
         enabled = getConfig().getBoolean("enabled", true);
         limitWater = getConfig().getBoolean("limit-water", true);
         heatEnabled = getConfig().getBoolean("heat-enabled", true);
+        limitDeathMessages = getConfig().getBoolean("limit-death-messages", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
