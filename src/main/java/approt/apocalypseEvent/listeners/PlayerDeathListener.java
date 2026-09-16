@@ -50,6 +50,9 @@ public class PlayerDeathListener implements Listener {
             else
                 message = "§c" + message;
 
+            // Clear the normal death message
+            event.setDeathMessage(null);
+
             // Initialize location variables and get nearby entities
             Location location = event.getEntity().getLocation();
             int range = Math.max(plugin.deathMessageRange, 0);
