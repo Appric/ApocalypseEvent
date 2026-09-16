@@ -11,10 +11,9 @@ import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public final class ApocalypseEvent extends JavaPlugin {
 
@@ -26,6 +25,8 @@ public final class ApocalypseEvent extends JavaPlugin {
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
+    public HashMap<UUID, BukkitTask> freezeTickTasks = new HashMap<>();
+    public HashMap<UUID, BukkitTask> applyHeatTasks = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -49,6 +50,8 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerRespawnListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerLeaveListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
     }
 
     // Loads the config values
@@ -101,11 +104,21 @@ public final class ApocalypseEvent extends JavaPlugin {
             startPlayerHeat(player);
     }
 
+    // Function to remove repeating tasks
+    public void removeRepeatingTasks(Player player)
+    {
+        // Freezing ticks
+        freezeTickTasks.remove(player.getUniqueId());
+
+        // Heat
+        applyHeatTasks.remove(player.getUniqueId());
+    }
+
     // Function to schedule the repeating freeze tick task
     public void applyPlayerFreeze(Player player)
     {
         // Schedule a repeating task to add freezing ticks
-        new BukkitRunnable() {
+        freezeTickTasks.put(player.getUniqueId(), new BukkitRunnable() {
             @Override
             public void run() {
                 // Checks if the player is online, exists, is alive, and is still in a cold biome
@@ -114,16 +127,19 @@ public final class ApocalypseEvent extends JavaPlugin {
                     player.setFreezeTicks(Math.min(player.getFreezeTicks() + 4, player.getMaxFreezeTicks() + 2));
                 }
                 else // Cancels the event when it is no longer valid
+                {
+                    freezeTickTasks.remove(player.getUniqueId());
                     this.cancel();
+                }
             }
-        }.runTaskTimer(this, 0L, 1L); // The 0 is when to start and the 1 is how many ticks later to run again
+        }.runTaskTimer(this, 0L, 1L)); // The 0 is when to start and the 1 is how many ticks later to run again
     }
 
     // Function to apply the heat repeating task
     public void startPlayerHeat(Player player)
     {
         // Schedule a repeating task to handle heat functions
-        new BukkitRunnable() {
+        applyHeatTasks.put(player.getUniqueId(), new BukkitRunnable() {
             @Override
             public void run() {
                 // Initialize variables
@@ -176,9 +192,12 @@ public final class ApocalypseEvent extends JavaPlugin {
                     }
                 }
                 else // Cancels the event when it is no longer valid
+                {
+                    applyHeatTasks.remove(player.getUniqueId());
                     this.cancel();
+                }
             }
-        }.runTaskTimer(this, 0L, 2 * 20L); // The 0 is when to start and the * 20 is to convert seconds into ticks
+        }.runTaskTimer(this, 0L, 2 * 20L)); // The 0 is when to start and the * 20 is to convert seconds into ticks
     }
 
     @Override
