@@ -1,6 +1,7 @@
 package approt.apocalypseEvent.listeners;
 
 import approt.apocalypseEvent.ApocalypseEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,12 +26,9 @@ public class PlayerRespawnListener implements Listener {
         // Declare player
         Player player = event.getPlayer();
 
-        // Check if the player respawning is respawning in a cold biome and needs freezing ticks
-        if(plugin.freezingBiomes.contains(event.getRespawnLocation().getBlock().getBiome()))
-            plugin.applyPlayerFreeze(player);
-
-        // Apply player heat if enabled
-        if(plugin.heatEnabled)
-            plugin.startPlayerHeat(player);
+        // Reinstate repeating tasks in 1 tick
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            plugin.reinstateRepeatingTasks(player);
+        }, 1L);
     }
 }

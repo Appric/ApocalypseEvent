@@ -1,8 +1,10 @@
 package approt.apocalypseEvent;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 
 public class ApocalypseEventCommand implements CommandExecutor {
@@ -38,8 +40,9 @@ public class ApocalypseEventCommand implements CommandExecutor {
             plugin.loadConfigValues();
 
             if(plugin.enabled) {
-                // Reinstate repeating tasks
-                plugin.reinstateRepeatingTasks();
+                // Reinstate repeating tasks for all online players
+                for(Player player : Bukkit.getOnlinePlayers())
+                    plugin.reinstateRepeatingTasks(player);
 
                 // Send enabled message
                 sender.sendMessage("§6[ApocalypseEvent] §aThe plugin has been enabled!§r");

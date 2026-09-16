@@ -26,12 +26,9 @@ public class PlayerJoinListener implements Listener {
         // Declare player
         Player player = event.getPlayer();
 
-        // Check if the player joining is in a cold biome and needs freezing ticks
-        if(plugin.freezingBiomes.contains(player.getLocation().getBlock().getBiome()))
-            plugin.applyPlayerFreeze(player);
-
-        // Apply player heat if enabled
-        if(plugin.heatEnabled)
-            plugin.startPlayerHeat(player);
+        // Reinstate repeating tasks in 1 tick
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            plugin.reinstateRepeatingTasks(player);
+        }, 1L);
     }
 }

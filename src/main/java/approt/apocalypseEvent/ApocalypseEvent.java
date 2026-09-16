@@ -90,18 +90,15 @@ public final class ApocalypseEvent extends JavaPlugin {
     }
 
     // Function to reapply repeating tasks when toggled if applicable
-    public void reinstateRepeatingTasks()
+    public void reinstateRepeatingTasks(Player player)
     {
-        for(Player player : Bukkit.getOnlinePlayers())
-        {
-            // Check if the player is in a cold biome and needs freezing ticks
-            if(freezingBiomes.contains(player.getLocation().getBlock().getBiome()))
-                applyPlayerFreeze(player);
+        // Check if the player is in a cold biome and needs freezing ticks
+        if(freezingBiomes.contains(player.getLocation().getBlock().getBiome()))
+            applyPlayerFreeze(player);
 
-            // Apply player heat if enabled
-            if(heatEnabled)
-                startPlayerHeat(player);
-        }
+        // Apply player heat if enabled
+        if(heatEnabled)
+            startPlayerHeat(player);
     }
 
     // Function to schedule the repeating freeze tick task
