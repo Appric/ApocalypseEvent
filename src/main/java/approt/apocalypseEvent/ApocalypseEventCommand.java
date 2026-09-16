@@ -23,6 +23,26 @@ public class ApocalypseEventCommand implements CommandExecutor {
             plugin.loadConfigValues();
             sender.sendMessage("§6[ApocalypseEvent] §aThe config has been reloaded!§r");
         }
+        // Checks for the toggle command and proper permissions
+        else if(args[0].equals("toggle") && sender.hasPermission("apocalypseevent.toggle"))
+        {
+            // Check if already enabled or not
+            if(plugin.enabled)
+                plugin.getConfig().set("enabled", false);
+
+            else
+                plugin.getConfig().set("enabled", true);
+
+            // Save updated value
+            plugin.saveConfig();
+            plugin.loadConfigValues();
+
+            if(plugin.enabled)
+                sender.sendMessage("§6[ApocalypseEvent] §aThe plugin has been enabled!§r");
+            else
+                sender.sendMessage("§6[ApocalypseEvent] §cThe plugin has been disabled!§r");
+        }
+
         return true;
     }
 }

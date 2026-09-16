@@ -21,3 +21,5 @@ permissions:
     children:
       apocalypseevent.reload:
         description: Allows players to reload the config with /apocalypseevent reload
+      apocalypseevent.toggle:
+        description: Allows players to enable and disable the plugin with /apocalypseevent toggle
