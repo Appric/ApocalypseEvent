@@ -29,5 +29,9 @@ public class PlayerJoinListener implements Listener {
         // Check if the player joining is in a cold biome and needs freezing ticks
         if(plugin.freezingBiomes.contains(player.getLocation().getBlock().getBiome()))
             plugin.applyPlayerFreeze(player);
+
+        // Apply player heat if enabled
+        if(plugin.heatEnabled)
+            plugin.startPlayerHeat(player);
     }
 }

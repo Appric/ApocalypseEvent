@@ -37,9 +37,15 @@ public class ApocalypseEventCommand implements CommandExecutor {
             plugin.saveConfig();
             plugin.loadConfigValues();
 
-            if(plugin.enabled)
+            if(plugin.enabled) {
+                // Reinstate repeating tasks
+                plugin.reinstateRepeatingTasks();
+
+                // Send enabled message
                 sender.sendMessage("§6[ApocalypseEvent] §aThe plugin has been enabled!§r");
+            }
             else
+                // Send disabled message
                 sender.sendMessage("§6[ApocalypseEvent] §cThe plugin has been disabled!§r");
         }
 

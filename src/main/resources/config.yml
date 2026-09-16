@@ -1,6 +1,7 @@
 #ApocalypseEvent Config
 
 enabled: true # Sets whether the plugin is enabled or not
+
 undried-blocks: # List of blocks that can only be placed next to each other
   - DIRT
   - GRASS_BLOCK
@@ -12,6 +13,10 @@ fragile-blocks: # List of blocks that will not drop when mined
   - FARMLAND
   - MYCELIUM
   - PODZOL
+
+heat: true # Sets whether to use the heat mechanic
+heat-threshold: 12 # Sets how much heat must be obtained before damaging
+
 limit-water: false # Sets whether you can only place water next to undried blocks or not
 freezing-biomes:
   - snowy_taiga

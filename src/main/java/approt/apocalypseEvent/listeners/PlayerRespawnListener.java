@@ -28,5 +28,9 @@ public class PlayerRespawnListener implements Listener {
         // Check if the player respawning is respawning in a cold biome and needs freezing ticks
         if(plugin.freezingBiomes.contains(event.getRespawnLocation().getBlock().getBiome()))
             plugin.applyPlayerFreeze(player);
+
+        // Apply player heat if enabled
+        if(plugin.heatEnabled)
+            plugin.startPlayerHeat(player);
     }
 }
