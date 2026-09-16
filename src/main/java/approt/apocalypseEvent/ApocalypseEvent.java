@@ -163,6 +163,13 @@ public final class ApocalypseEvent extends JavaPlugin {
                                 }
                             }
                         }
+                        else // Slightly reduce heat during the night
+                        {
+                            heat -= 2;
+                            // Remove even more heat once the sunsets
+                            if (time > 14000 && time < 22000)
+                                heat -= 2;
+                        }
 
                         // Check if heat is at the threshold
                         if (heat >= heatThreshold) {
