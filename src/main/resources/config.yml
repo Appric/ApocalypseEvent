@@ -8,6 +8,10 @@ fragile-blocks: # List of blocks that will not drop when mined
   - DIRT
   - COARSE_DIRT
   - ROOTED_DIRT
+  - DIRT_PATH
+  - FARMLAND
+  - MYCELIUM
+  - PODZOL
 limit-water: false # Sets whether you can only place water next to undried blocks or not
 freezing-biomes:
   - snowy_taiga
