@@ -17,8 +17,10 @@ fragile-blocks: # List of blocks that will not drop when mined
 heat: true # Sets whether to use the heat mechanic
 heat-threshold: 12 # Sets how much heat must be obtained before damaging
 
-limit-death-messages: true # Sets whether to require player to be in a certain range to see death messages
+limit-death-messages: true # Sets whether to require players to be in a certain range to see death messages
 death-message-range: 20 # The range death messages can be seen if enabled
+limit-chat-messages: true # Sets whether to require players to be in a certain range to see chat messages
+chat-message-range: 20 # The range chat messages can be seen if enabled
 
 limit-water: false # Sets whether you can only place water next to undried blocks or not
 freezing-biomes:

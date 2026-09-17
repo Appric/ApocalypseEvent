@@ -20,10 +20,12 @@ public final class ApocalypseEvent extends JavaPlugin {
     // Public variables
     public int heatThreshold;
     public int deathMessageRange;
+    public int chatMessageRange;
     public Boolean enabled;
     public Boolean limitWater;
     public Boolean heatEnabled;
     public Boolean limitDeathMessages;
+    public Boolean limitChatMessages;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
@@ -54,6 +56,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerRespawnListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerLeaveListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerChatListener(this), this);
     }
 
     // Loads the config values
@@ -64,12 +67,14 @@ public final class ApocalypseEvent extends JavaPlugin {
         // Set public ints
         heatThreshold = getConfig().getInt("heat-threshold", 12);
         deathMessageRange = getConfig().getInt("death-message-range", 20);
+        chatMessageRange = getConfig().getInt("chat-message-range", 20);
 
         // Set public Booleans
         enabled = getConfig().getBoolean("enabled", true);
         limitWater = getConfig().getBoolean("limit-water", true);
         heatEnabled = getConfig().getBoolean("heat-enabled", true);
         limitDeathMessages = getConfig().getBoolean("limit-death-messages", true);
+        limitChatMessages = getConfig().getBoolean("limit-chat-messages", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
@@ -187,6 +192,11 @@ public final class ApocalypseEvent extends JavaPlugin {
                             if (time > 14000 && time < 22000)
                                 heat -= 2;
                         }
+
+                        // Add heat depending on how far they are underground (thermal heating)
+                        int Y = location.getBlockY();
+                        if(Y < 63)
+                            heat += (int)Math.ceil(Math.abs(63 - Y) / 25.0);
 
                         // Check if heat is at the threshold
                         if (heat >= heatThreshold) {
