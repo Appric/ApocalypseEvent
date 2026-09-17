@@ -10,6 +10,9 @@ import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -197,6 +200,11 @@ public final class ApocalypseEvent extends JavaPlugin {
                         int Y = location.getBlockY();
                         if(Y < 63)
                             heat += (int)Math.ceil(Math.abs(63 - Y) / 25.0);
+
+                        // Remove some heat if under the wind charged effect
+                        for(PotionEffect effect : player.getActivePotionEffects())
+                            if(effect.getType() == PotionEffectType.WIND_CHARGED)
+                                heat -= 4;
 
                         // Check if heat is at the threshold
                         if (heat >= heatThreshold) {
