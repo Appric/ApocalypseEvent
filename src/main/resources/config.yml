@@ -5,6 +5,7 @@ enabled: true # Sets whether the plugin is enabled or not
 undried-blocks: # List of blocks that can only be placed next to each other
   - DIRT
   - GRASS_BLOCK
+  - MYCELIUM
 fragile-blocks: # List of blocks that will not drop when mined
   - DIRT
   - COARSE_DIRT
