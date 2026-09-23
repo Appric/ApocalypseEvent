@@ -4,12 +4,14 @@ import approt.apocalypseEvent.ApocalypseEvent;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -33,13 +35,31 @@ public class PlayerDeathListener implements Listener {
         // Call remove repeating tasks function
         plugin.removeRepeatingTasks(event.getEntity());
 
+        // Set player variables
+        Player player = event.getEntity();
+        Player killer = player.getKiller();
+
+        // Check if they should lose their armor
+        if(plugin.dropArmorToFire)
+        {
+            // Check if it was a fire death
+            DamageType damage = event.getDamageSource().getDamageType();
+            if(damage == DamageType.IN_FIRE || damage == DamageType.ON_FIRE || damage == DamageType.CAMPFIRE || damage == DamageType.FIREBALL || damage == DamageType.LAVA)
+            {
+                // Get the armor and add it to drops
+                for(ItemStack item : player.getInventory().getArmorContents())
+                {
+                    event.getDrops().add(item);
+                }
+
+                // Clear their armor
+                Objects.requireNonNull(player.getEquipment()).setArmorContents(null);
+            }
+        }
+
         // Check to limit range of death messages
         if(plugin.limitDeathMessages)
         {
-            // Set player variables
-            Player player = event.getEntity();
-            Player killer = player.getKiller();
-
             // Color the message
             String message = event.getDeathMessage();
             event.setDeathMessage(null);

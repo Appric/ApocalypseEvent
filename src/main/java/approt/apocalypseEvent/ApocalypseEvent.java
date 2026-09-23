@@ -29,6 +29,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean limitDeathMessages;
     public Boolean limitChatMessages;
     public Boolean dropDriedGhasts;
+    public Boolean dropArmorToFire;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
@@ -80,6 +81,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         limitDeathMessages = getConfig().getBoolean("limit-death-messages", true);
         limitChatMessages = getConfig().getBoolean("limit-chat-messages", true);
         dropDriedGhasts = getConfig().getBoolean("drop-dried-ghasts", true);
+        dropArmorToFire = getConfig().getBoolean("drop-armor-to-fire", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();

@@ -24,6 +24,7 @@ limit-chat-messages: true # Sets whether to require players to be in a certain r
 chat-message-range: 20 # The range chat messages can be seen if enabled
 
 drop-dried-ghasts: true # Sets whether happy ghasts will drop dried ghasts when they die
+drop-armor-to-fire: true # Sets whether players will drop their armor to a fire-related death
 
 limit-water: false # Sets whether you can only place water next to undried blocks or not
 freezing-biomes:
