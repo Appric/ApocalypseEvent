@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -29,6 +28,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean heatEnabled;
     public Boolean limitDeathMessages;
     public Boolean limitChatMessages;
+    public Boolean dropDriedGhasts;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
@@ -60,6 +60,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerLeaveListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new EntityDieListener(this), this);
     }
 
     // Loads the config values
@@ -78,6 +79,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         heatEnabled = getConfig().getBoolean("heat-enabled", true);
         limitDeathMessages = getConfig().getBoolean("limit-death-messages", true);
         limitChatMessages = getConfig().getBoolean("limit-chat-messages", true);
+        dropDriedGhasts = getConfig().getBoolean("drop-dried-ghasts", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
