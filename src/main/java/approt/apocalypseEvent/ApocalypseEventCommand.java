@@ -9,14 +9,15 @@ import org.jspecify.annotations.NonNull;
 
 public class ApocalypseEventCommand implements CommandExecutor {
 
-    // Connect to the main class
+    // Connect to the main and InfectionFunctions classes
     private final ApocalypseEvent plugin;
-    public ApocalypseEventCommand(ApocalypseEvent plugin) {this.plugin = plugin;}
+    private final InfectionFunctions infectionFunctions;
+    public ApocalypseEventCommand(ApocalypseEvent plugin, InfectionFunctions infectionFunctions) {this.plugin = plugin; this.infectionFunctions = infectionFunctions;}
 
     @Override
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, String @NonNull [] args){
         // Checks if they supplied any arguments
-        if(args.length != 1)
+        if(args.length < 1 || args.length > 2)
             return false;
 
         // Checks for the reload command and proper permissions
@@ -50,6 +51,26 @@ public class ApocalypseEventCommand implements CommandExecutor {
             else
                 // Send disabled message
                 sender.sendMessage("§6[ApocalypseEvent] §cThe plugin has been disabled!§r");
+        }
+        // Checks for the infect command and proper permissions
+        else if(args[0].equals("infect") && sender.hasPermission("apocalypseevent.infect"))
+        {
+            // Check for another argument
+            if(args.length < 2) {
+                sender.sendMessage("§6[ApocalypseEvent] §cYou must supply a player!§r");
+                return true;
+            }
+
+            // Check if the player exists and is online
+            Player player = Bukkit.getPlayerExact(args[1]);
+            if(player == null)
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player does not exist or is not online!§r");
+                return true;
+            }
+
+            // Call the infection function
+            infectionFunctions.StartInfection(player);
         }
 
         return true;

@@ -45,7 +45,7 @@ public class PlayerChatListener implements Listener {
             // Make formatted name
             String name;
             if(team != null)
-                name = team.getPrefix() + team.getColor() + player.getDisplayName() + team.getSuffix() + ChatColor.RESET;
+                name = team.getColor() + team.getPrefix() + team.getColor() + player.getDisplayName() + team.getSuffix() + ChatColor.RESET;
             else
                 name = player.getDisplayName();
 

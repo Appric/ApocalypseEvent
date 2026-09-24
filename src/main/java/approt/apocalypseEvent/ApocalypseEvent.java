@@ -14,6 +14,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.Criteria;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.*;
 
@@ -23,6 +26,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public int heatThreshold;
     public int deathMessageRange;
     public int chatMessageRange;
+    public int infectTime;
     public Boolean enabled;
     public Boolean limitWater;
     public Boolean heatEnabled;
@@ -30,11 +34,16 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean limitChatMessages;
     public Boolean dropDriedGhasts;
     public Boolean dropArmorToFire;
+    public Boolean infection;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
     public HashMap<UUID, BukkitTask> freezeTickTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> applyHeatTasks = new HashMap<>();
+    public HashMap<UUID, BukkitTask> infectTasks = new HashMap<>();
+
+    // Connect to InfectionFunctions class
+    private InfectionFunctions infectionFunctions;
 
     @Override
     public void onEnable() {
@@ -45,8 +54,11 @@ public final class ApocalypseEvent extends JavaPlugin {
         saveDefaultConfig();
         loadConfigValues();
 
+        // Adds the InfectionFunctions class
+        this.infectionFunctions = new InfectionFunctions(this);
+
         // Register the command
-        Objects.requireNonNull(getCommand("apocalypseevent")).setExecutor(new ApocalypseEventCommand(this));
+        Objects.requireNonNull(getCommand("apocalypseevent")).setExecutor(new ApocalypseEventCommand(this, infectionFunctions));
 
         // Register the tab completer
         Objects.requireNonNull(getCommand("apocalypseevent")).setTabCompleter(new ApocalypseEventTabCompleter());
@@ -73,6 +85,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         heatThreshold = getConfig().getInt("heat-threshold", 12);
         deathMessageRange = getConfig().getInt("death-message-range", 20);
         chatMessageRange = getConfig().getInt("chat-message-range", 20);
+        infectTime = getConfig().getInt("infect-time", 300);
 
         // Set public Booleans
         enabled = getConfig().getBoolean("enabled", true);
@@ -82,6 +95,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         limitChatMessages = getConfig().getBoolean("limit-chat-messages", true);
         dropDriedGhasts = getConfig().getBoolean("drop-dried-ghasts", true);
         dropArmorToFire = getConfig().getBoolean("drop-armor-to-fire", true);
+        infection = getConfig().getBoolean("infection", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
@@ -111,6 +125,8 @@ public final class ApocalypseEvent extends JavaPlugin {
     // Function to reapply repeating tasks when toggled if applicable
     public void reinstateRepeatingTasks(Player player)
     {
+        Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
+
         // Check if the player is in a cold biome and needs freezing ticks
         if(freezingBiomes.contains(player.getLocation().getBlock().getBiome()))
             applyPlayerFreeze(player);
@@ -118,6 +134,11 @@ public final class ApocalypseEvent extends JavaPlugin {
         // Apply player heat if enabled
         if(heatEnabled)
             startPlayerHeat(player);
+
+        // Check if infection is enabled and the player has infection time
+        Objective objective = scoreboard.getObjective("infectCount");
+        if(infection && objective != null && objective.getScore(player.getName()).getScore() > 0)
+            applyInfectionTime(player);
     }
 
     // Function to remove repeating tasks
@@ -128,6 +149,9 @@ public final class ApocalypseEvent extends JavaPlugin {
 
         // Heat
         applyHeatTasks.remove(player.getUniqueId());
+
+        // Infection
+        infectTasks.remove(player.getUniqueId());
     }
 
     // Function to schedule the repeating freeze tick task
@@ -226,6 +250,57 @@ public final class ApocalypseEvent extends JavaPlugin {
                 }
             }
         }.runTaskTimer(this, 0L, 2 * 20L)); // The 0 is when to start and the * 20 is to convert seconds into ticks
+    }
+
+    // Function to schedule the repeating freeze tick task
+    public void applyInfectionTime(Player player)
+    {
+        // Schedule a repeating task to decrease infection
+        infectTasks.put(player.getUniqueId(), new BukkitRunnable() {
+            @Override
+            public void run() {
+                // Checks if the player is online, exists, and is alive
+                if(enabled && infection && player.isOnline() && player.isValid() && !player.isDead()) {
+                    // Change the score of the player
+                    Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
+                    Objective objective = scoreboard.getObjective("infectCount");
+
+                    // Checks if the objective exists
+                    if(objective == null)
+                    {
+                        objective = scoreboard.registerNewObjective("infectCount", Criteria.DUMMY, "Infection Imminent");
+                        objective.getScore(player.getName()).setScore(infectTime);
+                    }
+                    else
+                    {
+                        int score = objective.getScore(player.getName()).getScore();
+
+                        // Checks if this would be the end of the score
+                        if(score - 1 <= 0)
+                        {
+                            // Attempt to clear the score
+                            String scoreReset = "scoreboard players reset " + player.getName() + " " + objective.getName();
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), scoreReset);
+
+                            // Call convert function and remove task
+                            infectionFunctions.ConvertToInfected(player);
+                            infectTasks.remove(player.getUniqueId());
+                            this.cancel();
+                        }
+                        else
+                        {
+                            // Decreases the score by 1
+                            objective.getScore(player.getName()).setScore(score - 1);
+                        }
+                    }
+                }
+                else // Cancels the event when it is no longer valid
+                {
+                    infectTasks.remove(player.getUniqueId());
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(this, 0L, 20L)); // The 0 is when to start and the 20 is how many ticks later to run again (1 second)
     }
 
     @Override

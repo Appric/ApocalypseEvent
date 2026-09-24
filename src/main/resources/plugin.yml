@@ -23,3 +23,5 @@ permissions:
         description: Allows players to reload the config with /apocalypseevent reload
       apocalypseevent.toggle:
         description: Allows players to enable and disable the plugin with /apocalypseevent toggle
+      apocalypseevent.infect:
+        description: Allows players to infect a player with /apocalypseevent infect
