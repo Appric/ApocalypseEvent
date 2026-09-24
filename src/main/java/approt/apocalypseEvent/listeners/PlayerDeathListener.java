@@ -44,7 +44,7 @@ public class PlayerDeathListener implements Listener {
         {
             // Check if it was a fire death
             DamageType damage = event.getDamageSource().getDamageType();
-            if(damage == DamageType.IN_FIRE || damage == DamageType.ON_FIRE || damage == DamageType.CAMPFIRE || damage == DamageType.FIREBALL || damage == DamageType.LAVA)
+            if(damage == DamageType.IN_FIRE || damage == DamageType.ON_FIRE || damage == DamageType.CAMPFIRE || damage == DamageType.FIREBALL || damage == DamageType.LAVA || damage == DamageType.DRY_OUT)
             {
                 // Get the armor and add it to drops
                 for(ItemStack item : player.getInventory().getArmorContents())
