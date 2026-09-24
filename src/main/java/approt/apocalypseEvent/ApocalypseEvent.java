@@ -208,6 +208,10 @@ public final class ApocalypseEvent extends JavaPlugin {
                             if(effect.getType() == PotionEffectType.WIND_CHARGED)
                                 heat -= 4;
 
+                        // Remove some heat if in water
+                        if(player.isInWater())
+                            heat--;
+
                         // Check if heat is at the threshold
                         if (heat >= heatThreshold) {
                             player.damage(2, DamageSource.builder(DamageType.DRY_OUT).build());
