@@ -72,6 +72,26 @@ public class ApocalypseEventCommand implements CommandExecutor {
             // Call the infection function
             infectionFunctions.StartInfection(player);
         }
+        // Checks for the infect command and proper permissions
+        else if(args[0].equals("cure") && sender.hasPermission("apocalypseevent.cure"))
+        {
+            // Check for another argument
+            if(args.length < 2) {
+                sender.sendMessage("§6[ApocalypseEvent] §cYou must supply a player!§r");
+                return true;
+            }
+
+            // Check if the player exists and is online
+            Player player = Bukkit.getPlayerExact(args[1]);
+            if(player == null)
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player does not exist or is not online!§r");
+                return true;
+            }
+
+            // Call cure function
+            infectionFunctions.CureInfected(player);
+        }
 
         return true;
     }

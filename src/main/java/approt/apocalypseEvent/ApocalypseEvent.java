@@ -9,6 +9,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -144,14 +145,22 @@ public final class ApocalypseEvent extends JavaPlugin {
     // Function to remove repeating tasks
     public void removeRepeatingTasks(Player player)
     {
+        UUID uuid = player.getUniqueId();
+
         // Freezing ticks
-        freezeTickTasks.remove(player.getUniqueId());
+        if(freezeTickTasks.containsKey(uuid))
+            freezeTickTasks.get(uuid).cancel();
+        freezeTickTasks.remove(uuid);
 
         // Heat
-        applyHeatTasks.remove(player.getUniqueId());
+        if(applyHeatTasks.containsKey(uuid))
+            applyHeatTasks.get(uuid).cancel();
+        applyHeatTasks.remove(uuid);
 
         // Infection
-        infectTasks.remove(player.getUniqueId());
+        if(infectTasks.containsKey(uuid))
+            infectTasks.get(uuid).cancel();
+        infectTasks.remove(uuid);
     }
 
     // Function to schedule the repeating freeze tick task
@@ -211,6 +220,10 @@ public final class ApocalypseEvent extends JavaPlugin {
                                     // Even more extra heat if also midday, exposed to the sky, and no helmet
                                     if (time > 4500 && time < 7500)
                                         heat += 4;
+
+                                    // If the player is infected set them on fire
+                                    if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(ApocalypseEvent.this, "infected"), PersistentDataType.BOOLEAN), true))
+                                        player.setFireTicks(160);
                                 }
                             }
                         }

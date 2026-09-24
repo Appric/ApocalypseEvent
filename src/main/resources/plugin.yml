@@ -25,3 +25,5 @@ permissions:
         description: Allows players to enable and disable the plugin with /apocalypseevent toggle
       apocalypseevent.infect:
         description: Allows players to infect a player with /apocalypseevent infect
+      apocalypseevent.cure:
+        description: Allows players to cure an infected player with /apocalypseevent cure
