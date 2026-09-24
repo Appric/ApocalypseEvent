@@ -94,6 +94,10 @@ public class InfectionFunctions {
 
         // Unset the persistent infected data
         player.getPersistentDataContainer().set(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN, false);
+
+        // Clear infected effects
+        player.removePotionEffect(PotionEffectType.SLOWNESS);
+        player.removePotionEffect(PotionEffectType.HUNGER);
     }
 
     public void ApplyInfectedEffects(Player player)
