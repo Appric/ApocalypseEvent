@@ -36,12 +36,16 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean dropDriedGhasts;
     public Boolean dropArmorToFire;
     public Boolean infection;
+    public Boolean fireOnlyDeathInfected;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
     public HashMap<UUID, BukkitTask> freezeTickTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> applyHeatTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> infectTasks = new HashMap<>();
+
+    // List of fire related damage types
+    public List<DamageType> fireDamageTypes = new ArrayList<>(List.of(DamageType.IN_FIRE, DamageType.ON_FIRE, DamageType.CAMPFIRE, DamageType.LAVA, DamageType.FIREBALL, DamageType.UNATTRIBUTED_FIREBALL, DamageType.DRY_OUT));
 
     // Connect to InfectionFunctions class
     private InfectionFunctions infectionFunctions;
@@ -100,6 +104,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         dropDriedGhasts = getConfig().getBoolean("drop-dried-ghasts", true);
         dropArmorToFire = getConfig().getBoolean("drop-armor-to-fire", true);
         infection = getConfig().getBoolean("infection", true);
+        fireOnlyDeathInfected = getConfig().getBoolean("fire-only-death-infected", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();

@@ -120,6 +120,9 @@ public class InfectionFunctions {
         // Get the level of slowness and apply it
         int level = (int) Math.ceil((Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).getValue() - player.getHealth()) / 4);
         level++;
+        // Prevent the slowness from becoming unwalkable
+        level = Math.min(level, 5);
+
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, PotionEffect.INFINITE_DURATION, level, true));
     }
 }

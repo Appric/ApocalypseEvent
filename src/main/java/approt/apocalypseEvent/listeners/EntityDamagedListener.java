@@ -38,6 +38,20 @@ public class EntityDamagedListener implements Listener {
             if (Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true)) {
                 // Runs the task later so that the new health (after damage) will be applied
                 Bukkit.getScheduler().runTaskLater(plugin, () -> infectionFunctions.ApplyInfectedEffects(player), 1L);
+
+                // Checks if only fire can kill them
+                if(plugin.fireOnlyDeathInfected)
+                {
+                    // Checks if it is enough damage to kill
+                    if(player.getHealth() - event.getDamage() < 1)
+                    {
+                        // Checks if it was fire damage
+                        if(!(plugin.fireDamageTypes.contains(event.getDamageSource().getDamageType()) || player.getFireTicks() > 0)) {
+                            event.setDamage(player.getHealth() - 1);
+                        }
+                    }
+
+                }
             }
         }
     }

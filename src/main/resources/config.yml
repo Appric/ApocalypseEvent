@@ -32,3 +32,4 @@ freezing-biomes:
 
 infection: true # Sets whether to use the infection mechanics
 infect-time: 300 # The time in seconds before a player is converted from infection
+fire-only-death-infected: true # Sets whether fire-related damage is the only way for an infected player to die
