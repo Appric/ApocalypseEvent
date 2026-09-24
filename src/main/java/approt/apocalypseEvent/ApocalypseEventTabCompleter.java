@@ -20,7 +20,7 @@ public class ApocalypseEventTabCompleter implements TabCompleter {
 
         if(args.length == 1)
         {
-            subcommands = Arrays.asList("reload", "toggle", "infect", "cure");
+            subcommands = Arrays.asList("reload", "toggle", "infect", "cure", "convert");
 
             // Only auto completes for sub commands you have permission for
             for(String string : subcommands)
@@ -36,7 +36,7 @@ public class ApocalypseEventTabCompleter implements TabCompleter {
         else if(args.length == 2)
         {
             // Check if it is for the infect command
-            if(args[0].equals("infect") || args[0].equals("cure"))
+            if(args[0].equals("infect") || args[0].equals("cure") || args[0].equals("convert"))
             {
                 // Suggest online players
                 for(Player player : Bukkit.getOnlinePlayers())

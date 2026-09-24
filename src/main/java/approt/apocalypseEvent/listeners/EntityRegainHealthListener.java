@@ -34,7 +34,7 @@ public class EntityRegainHealthListener implements Listener {
         Entity entity = event.getEntity();
         if(entity instanceof Player player) {
             // If the player is infected apply the new slowness effect level
-            if (Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true)) {
+            if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true)) {
                 // Runs the task later so that the new health (after healing) will be applied
                 Bukkit.getScheduler().runTaskLater(plugin, () -> infectionFunctions.ApplyInfectedEffects(player), 1L);
             }
