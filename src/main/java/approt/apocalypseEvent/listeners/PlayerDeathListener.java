@@ -1,9 +1,7 @@
 package approt.apocalypseEvent.listeners;
 
 import approt.apocalypseEvent.ApocalypseEvent;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;

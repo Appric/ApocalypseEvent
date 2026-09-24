@@ -3,8 +3,11 @@ package approt.apocalypseEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -53,6 +56,9 @@ public class InfectionFunctions {
 
         team.addEntry(player.getName());
         player.getPersistentDataContainer().set(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN, true);
+
+        // Add the effects
+        ApplyInfectedEffects(player);
     }
 
     public void CureInfected(Player player)
@@ -88,5 +94,28 @@ public class InfectionFunctions {
 
         // Unset the persistent infected data
         player.getPersistentDataContainer().set(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN, false);
+    }
+
+    public void ApplyInfectedEffects(Player player)
+    {
+        // Apply Main Effects
+        player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, PotionEffect.INFINITE_DURATION, 0, true));
+
+        // Call Slowness Apply
+        ApplyInfectedSlowness(player);
+    }
+
+    public void ApplyInfectedSlowness(Player player)
+    {
+        // Check if the player already has slowness
+        if(player.getPotionEffect(PotionEffectType.SLOWNESS) != null)
+        {
+            player.removePotionEffect(PotionEffectType.SLOWNESS);
+        }
+
+        // Get the level of slowness and apply it
+        int level = (int) Math.ceil((Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).getValue() - player.getHealth()) / 4);
+        level++;
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, PotionEffect.INFINITE_DURATION, level, true));
     }
 }

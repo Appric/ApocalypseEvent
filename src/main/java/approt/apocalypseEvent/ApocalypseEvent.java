@@ -70,11 +70,14 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerRespawnListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerRespawnListener(this, infectionFunctions), this);
         getServer().getPluginManager().registerEvents(new PlayerLeaveListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerChatListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityDieListener(this), this);
+        getServer().getPluginManager().registerEvents(new ItemConsumeListener(this, infectionFunctions), this);
+        getServer().getPluginManager().registerEvents(new EntityDamagedListener(this, infectionFunctions), this);
+        getServer().getPluginManager().registerEvents(new EntityRegainHealthListener(this, infectionFunctions), this);
     }
 
     // Loads the config values
@@ -221,8 +224,8 @@ public final class ApocalypseEvent extends JavaPlugin {
                                     if (time > 4500 && time < 7500)
                                         heat += 4;
 
-                                    // If the player is infected set them on fire
-                                    if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(ApocalypseEvent.this, "infected"), PersistentDataType.BOOLEAN), true))
+                                    // If the player is infected set them on fire and not in water or storming/thundering
+                                    if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(ApocalypseEvent.this, "infected"), PersistentDataType.BOOLEAN), true) && !player.isInWater() && !(player.getWorld().hasStorm() || player.getWorld().isThundering()))
                                         player.setFireTicks(160);
                                 }
                             }
