@@ -27,7 +27,14 @@ public class ApocalypseEventCommand implements CommandExecutor {
         // Checks for the reload command and proper permissions
         if(args[0].equals("reload") && sender.hasPermission("apocalypseevent.reload"))
         {
+            // Load the new config values
             plugin.loadConfigValues();
+
+            // Unregister then register the recipes based on the new config values
+            plugin.unregisterRecipes();
+            plugin.registerRecipes();
+
+            // Send the reloaded message
             sender.sendMessage("§6[ApocalypseEvent] §aThe config has been reloaded!§r");
         }
         // Checks for the toggle command and proper permissions
@@ -36,7 +43,6 @@ public class ApocalypseEventCommand implements CommandExecutor {
             // Check if already enabled or not
             if(plugin.enabled)
                 plugin.getConfig().set("enabled", false);
-
             else
                 plugin.getConfig().set("enabled", true);
 
@@ -49,12 +55,19 @@ public class ApocalypseEventCommand implements CommandExecutor {
                 for(Player player : Bukkit.getOnlinePlayers())
                     plugin.reinstateRepeatingTasks(player);
 
+                // Register the recipes
+                plugin.registerRecipes();
+
                 // Send enabled message
                 sender.sendMessage("§6[ApocalypseEvent] §aThe plugin has been enabled!§r");
             }
-            else
+            else {
+                // Unregister the recipes
+                plugin.unregisterRecipes();
+
                 // Send disabled message
                 sender.sendMessage("§6[ApocalypseEvent] §cThe plugin has been disabled!§r");
+            }
         }
         // Checks for the infect command and proper permissions
         else if(args[0].equals("infect") && sender.hasPermission("apocalypseevent.infect"))

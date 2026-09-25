@@ -33,6 +33,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public int deathMessageRange;
     public int chatMessageRange;
     public int infectTime;
+    public int juiceDuration;
     public Boolean enabled;
     public Boolean limitWater;
     public Boolean heatEnabled;
@@ -42,6 +43,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean dropArmorToFire;
     public Boolean infection;
     public Boolean fireOnlyDeathInfected;
+    public Boolean customRecipes;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
@@ -102,6 +104,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         deathMessageRange = getConfig().getInt("death-message-range", 20);
         chatMessageRange = getConfig().getInt("chat-message-range", 20);
         infectTime = getConfig().getInt("infect-time", 300);
+        juiceDuration = getConfig().getInt("juice-duration", 90);
 
         // Set public Booleans
         enabled = getConfig().getBoolean("enabled", true);
@@ -113,6 +116,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         dropArmorToFire = getConfig().getBoolean("drop-armor-to-fire", true);
         infection = getConfig().getBoolean("infection", true);
         fireOnlyDeathInfected = getConfig().getBoolean("fire-only-death-infected", true);
+        customRecipes = getConfig().getBoolean("custom-recipes", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
@@ -332,8 +336,13 @@ public final class ApocalypseEvent extends JavaPlugin {
         }.runTaskTimer(this, 0L, 20L)); // The 0 is when to start and the 20 is how many ticks later to run again (1 second)
     }
 
+    // Function to register all custom recipes
     public void registerRecipes()
     {
+        // Checks if the plugin and custom recipes are enabled
+        if(!enabled || !customRecipes)
+            return;
+
         // Define the water bottle item stack
         ItemStack waterBottle = new ItemStack(Material.POTION);
         PotionMeta meta = (PotionMeta)waterBottle.getItemMeta();
@@ -347,7 +356,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         meta = (PotionMeta)coolJuice.getItemMeta();
         if(meta != null) {
             meta.setDisplayName("§5Cool Juice");
-            meta.addCustomEffect(new PotionEffect(PotionEffectType.WIND_CHARGED, 1800, 0, false),false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.WIND_CHARGED, juiceDuration * 20, 0, false),false);
             coolJuice.setItemMeta(meta);
         }
 
@@ -359,6 +368,12 @@ public final class ApocalypseEvent extends JavaPlugin {
 
         // Register the recipe
         Bukkit.addRecipe(coolJuiceRecipe);
+    }
+
+    // Function to remove the custom recipes
+    public void unregisterRecipes()
+    {
+        Bukkit.removeRecipe(new NamespacedKey(this, "cool_juice"));
     }
 
     @Override

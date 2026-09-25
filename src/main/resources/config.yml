@@ -33,3 +33,6 @@ freezing-biomes:
 infection: true # Sets whether to use the infection mechanics
 infect-time: 300 # The time in seconds before a player is converted from infection
 fire-only-death-infected: true # Sets whether fire-related damage is the only way for an infected player to die
+
+custom-recipes: true # Sets whether to use the custom recipes
+juice-duration: 90 # Sets the amount of seconds the juice effects last
