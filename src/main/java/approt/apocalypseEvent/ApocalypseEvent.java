@@ -9,10 +9,15 @@ import org.bukkit.block.Biome;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Criteria;
@@ -82,6 +87,9 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemConsumeListener(this, infectionFunctions), this);
         getServer().getPluginManager().registerEvents(new EntityDamagedListener(this, infectionFunctions), this);
         getServer().getPluginManager().registerEvents(new EntityRegainHealthListener(this, infectionFunctions), this);
+
+        // Call function to register the custom recipes
+        registerRecipes();
     }
 
     // Loads the config values
@@ -322,6 +330,35 @@ public final class ApocalypseEvent extends JavaPlugin {
                 }
             }
         }.runTaskTimer(this, 0L, 20L)); // The 0 is when to start and the 20 is how many ticks later to run again (1 second)
+    }
+
+    public void registerRecipes()
+    {
+        // Define the water bottle item stack
+        ItemStack waterBottle = new ItemStack(Material.POTION);
+        PotionMeta meta = (PotionMeta)waterBottle.getItemMeta();
+        if(meta != null) {
+            meta.setBasePotionType(PotionType.WATER);
+            waterBottle.setItemMeta(meta);
+        }
+
+        // Define Cool Juice item
+        ItemStack coolJuice = new ItemStack(Material.POTION);
+        meta = (PotionMeta)coolJuice.getItemMeta();
+        if(meta != null) {
+            meta.setDisplayName("§5Cool Juice");
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.WIND_CHARGED, 1800, 0, false),false);
+            coolJuice.setItemMeta(meta);
+        }
+
+        // Cool Juice recipe
+        ShapedRecipe coolJuiceRecipe = new ShapedRecipe(new NamespacedKey(this, "cool_juice"), coolJuice);
+        coolJuiceRecipe.shape("XXX", "XYX", "XXX");
+        coolJuiceRecipe.setIngredient('X', Material.CACTUS);
+        coolJuiceRecipe.setIngredient('Y', new RecipeChoice.ExactChoice(waterBottle));
+
+        // Register the recipe
+        Bukkit.addRecipe(coolJuiceRecipe);
     }
 
     @Override
