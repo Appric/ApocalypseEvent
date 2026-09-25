@@ -226,6 +226,7 @@ public final class ApocalypseEvent extends JavaPlugin {
 
                         // Then add heat based on time of day and if exposed to sunlight
                         if (time > 0 && time < 12000) {
+                            heat++;
 
                             // Check if it is close to midday
                             if (time > 4500 && time < 7500) // Heat of the day
@@ -249,7 +250,7 @@ public final class ApocalypseEvent extends JavaPlugin {
                         }
                         else // Slightly reduce heat during the night
                         {
-                            heat -= 2;
+                            heat--;
                             // Remove even more heat once the sunsets
                             if (time > 14000 && time < 22000)
                                 heat -= 2;
