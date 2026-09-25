@@ -9,9 +9,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -355,12 +353,6 @@ public final class ApocalypseEvent extends JavaPlugin {
                 {
                     infectTasks.remove(player.getUniqueId());
                     this.cancel();
-                }
-
-                // Check if the player has raid omen or not
-                if(time == 1)
-                {
-
                 }
             }
         }.runTaskTimer(this, 0L, time * 20L)); // The 0 is when to start and the 20 is how many ticks later to run again (time in seconds)
