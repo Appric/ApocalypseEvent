@@ -43,5 +43,7 @@ public class ItemConsumeListener implements Listener {
                 Bukkit.getScheduler().runTaskLater(plugin, () -> infectionFunctions.ApplyInfectedEffects(player), 1L);
             }
         }
+        else if(material == Material.POTION) // Checks in case a potion they drank affects their effects (i.e. sweet juice)
+            Bukkit.getScheduler().runTaskLater(plugin, () -> infectionFunctions.ApplyInfectedEffects(player), 1L);
     }
 }

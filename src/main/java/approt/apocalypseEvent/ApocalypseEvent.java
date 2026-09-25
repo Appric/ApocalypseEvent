@@ -286,15 +286,38 @@ public final class ApocalypseEvent extends JavaPlugin {
         }.runTaskTimer(this, 0L, 2 * 20L)); // The 0 is when to start and the * 20 is to convert seconds into ticks
     }
 
-    // Function to schedule the repeating freeze tick task
+    // Function to schedule the repeating infection task
     public void applyInfectionTime(Player player)
     {
+        // Declare variables
+        final boolean startedWithRaidOmen;
+        int time;
+
+        // Get if the player has raid omen or not and base time off of that
+        startedWithRaidOmen = player.hasPotionEffect(PotionEffectType.RAID_OMEN);
+        if(startedWithRaidOmen)
+            time = 3;
+        else
+            time = 1;
+
         // Schedule a repeating task to decrease infection
         infectTasks.put(player.getUniqueId(), new BukkitRunnable() {
             @Override
             public void run() {
                 // Checks if the player is online, exists, and is alive
                 if(enabled && infection && player.isOnline() && player.isValid() && !player.isDead()) {
+                    // Checks if the player's effect status has changed
+                    if(player.hasPotionEffect(PotionEffectType.RAID_OMEN) != startedWithRaidOmen)
+                    {
+                        // Remove the current repeating task
+                        infectTasks.remove(player.getUniqueId());
+                        this.cancel();
+
+                        // Recall applyInfectionTime to allow for a new delay on the task
+                        applyInfectionTime(player);
+                        return;
+                    }
+
                     // Change the score of the player
                     Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
                     Objective objective = scoreboard.getObjective("infectCount");
@@ -333,8 +356,14 @@ public final class ApocalypseEvent extends JavaPlugin {
                     infectTasks.remove(player.getUniqueId());
                     this.cancel();
                 }
+
+                // Check if the player has raid omen or not
+                if(time == 1)
+                {
+
+                }
             }
-        }.runTaskTimer(this, 0L, 20L)); // The 0 is when to start and the 20 is how many ticks later to run again (1 second)
+        }.runTaskTimer(this, 0L, time * 20L)); // The 0 is when to start and the 20 is how many ticks later to run again (time in seconds)
     }
 
     // Function to register all custom recipes
@@ -367,8 +396,24 @@ public final class ApocalypseEvent extends JavaPlugin {
         coolJuiceRecipe.setIngredient('X', Material.CACTUS);
         coolJuiceRecipe.setIngredient('Y', new RecipeChoice.ExactChoice(waterBottle));
 
-        // Register the recipe
+        // Define Sweet Juice item
+        ItemStack sweetJuice = new ItemStack(Material.POTION);
+        meta = (PotionMeta)sweetJuice.getItemMeta();
+        if(meta != null) {
+            meta.setDisplayName("§cSweet Juice");
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.RAID_OMEN, juiceDuration * 20, 0, false),false);
+            sweetJuice.setItemMeta(meta);
+        }
+
+        // Sweet Juice recipe
+        ShapedRecipe sweetJuiceRecipe = new ShapedRecipe(new NamespacedKey(this, "sweet_juice"), sweetJuice);
+        sweetJuiceRecipe.shape("XXX", "XYX", "XXX");
+        sweetJuiceRecipe.setIngredient('X', Material.SWEET_BERRIES);
+        sweetJuiceRecipe.setIngredient('Y', new RecipeChoice.ExactChoice(waterBottle));
+
+        // Register the recipes
         Bukkit.addRecipe(coolJuiceRecipe);
+        Bukkit.addRecipe(sweetJuiceRecipe);
     }
 
     // Function to remove the custom recipes
