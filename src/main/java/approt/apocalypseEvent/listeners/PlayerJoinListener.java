@@ -35,8 +35,6 @@ public class PlayerJoinListener implements Listener {
             return;
 
         // Reinstate repeating tasks in 1 tick
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            plugin.reinstateRepeatingTasks(player);
-        }, 1L);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> plugin.reinstateRepeatingTasks(player), 1L);
     }
 }

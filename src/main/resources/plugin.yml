@@ -2,7 +2,7 @@ name: ApocalypseEvent
 version: '${version}'
 
 main: approt.apocalypseEvent.ApocalypseEvent
-api-version: '26.1'
+api-version: '26.3'
 
 authors: [ approt ]
 
