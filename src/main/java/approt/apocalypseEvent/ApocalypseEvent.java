@@ -87,6 +87,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemConsumeListener(this, infectionFunctions), this);
         getServer().getPluginManager().registerEvents(new EntityDamagedListener(this, infectionFunctions), this);
         getServer().getPluginManager().registerEvents(new EntityRegainHealthListener(this, infectionFunctions), this);
+        getServer().getPluginManager().registerEvents(new PrepareSmithingListener(this), this);
 
         // Call function to register the custom recipes
         registerRecipes();
@@ -412,6 +413,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public void unregisterRecipes()
     {
         Bukkit.removeRecipe(new NamespacedKey(this, "cool_juice"));
+        Bukkit.removeRecipe(new NamespacedKey(this, "sweet_juice"));
     }
 
     @Override
