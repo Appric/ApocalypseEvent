@@ -8,6 +8,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Biome;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -88,6 +89,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EntityDamagedListener(this, infectionFunctions), this);
         getServer().getPluginManager().registerEvents(new EntityRegainHealthListener(this, infectionFunctions), this);
         getServer().getPluginManager().registerEvents(new PrepareSmithingListener(this), this);
+        getServer().getPluginManager().registerEvents(new PrepareEnchantListener(this), this);
 
         // Call function to register the custom recipes
         registerRecipes();
@@ -264,6 +266,12 @@ public final class ApocalypseEvent extends JavaPlugin {
                         for(PotionEffect effect : player.getActivePotionEffects())
                             if(effect.getType() == PotionEffectType.WIND_CHARGED)
                                 heat -= 4;
+
+                        // Remove some heat if their armor has the wind burst enchantment
+                        for(ItemStack item : player.getInventory().getArmorContents())
+                            if(item != null && item.hasItemMeta())
+                                if(Objects.requireNonNull(item.getItemMeta()).hasEnchant(Enchantment.WIND_BURST))
+                                    heat--;
 
                         // Remove some heat if in water
                         if(player.isInWater())
