@@ -5,6 +5,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -35,8 +38,19 @@ public class InfectionFunctions {
         if(objective == null)
             objective = scoreboard.registerNewObjective("infectCount", Criteria.DUMMY, "Infection Imminent");
 
+        // Check for gold trimmed armor
+        int additionalTime = 0;
+        ArmorMeta meta;
+        for(ItemStack item : player.getInventory().getArmorContents()) {
+            if (item != null && item.hasItemMeta()) {
+                meta = (ArmorMeta) item.getItemMeta();
+                if (meta != null && meta.hasTrim() && Objects.requireNonNull(meta.getTrim()).getMaterial() == TrimMaterial.GOLD)
+                    additionalTime += 30;
+            }
+        }
+
         // Set the player's score
-        objective.getScore(player.getName()).setScore(plugin.infectTime);
+        objective.getScore(player.getName()).setScore(plugin.infectTime + additionalTime);
 
         // Start the repeating task
         plugin.applyInfectionTime(player);

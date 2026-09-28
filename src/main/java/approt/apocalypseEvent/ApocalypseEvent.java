@@ -19,7 +19,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -332,8 +331,12 @@ public final class ApocalypseEvent extends JavaPlugin {
                     // Checks if the objective exists
                     if(objective == null)
                     {
-                        objective = scoreboard.registerNewObjective("infectCount", Criteria.DUMMY, "Infection Imminent");
-                        objective.getScore(player.getName()).setScore(infectTime);
+                        // Remove the current repeating task
+                        infectTasks.remove(player.getUniqueId());
+                        this.cancel();
+
+                        // Create the objective via InfectionFunctions
+                        infectionFunctions.StartInfection(player);
                     }
                     else
                     {
