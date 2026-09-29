@@ -3,12 +3,16 @@ package approt.apocalypseEvent.listeners;
 import approt.apocalypseEvent.ApocalypseEvent;
 import approt.apocalypseEvent.InfectionFunctions;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.damage.DamageType;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Objects;
@@ -52,6 +56,19 @@ public class EntityDamagedListener implements Listener {
                     }
 
                 }
+            }
+
+            // Check for channeling on armor to reduce lightning damage
+            if(event.getDamageSource().getDamageType() == DamageType.LIGHTNING_BOLT)
+            {
+                int levels = 0;
+                for(ItemStack item : player.getInventory().getArmorContents())
+                    if(item != null && item.getType() != Material.AIR)
+                        levels += item.getEnchantmentLevel(Enchantment.CHANNELING);
+
+                double newDamage = event.getDamage();
+                newDamage = newDamage * (1.0 - ((Math.min(8 * levels, 80) / 100.0)));
+                event.setDamage(newDamage);
             }
         }
     }
