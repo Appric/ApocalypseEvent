@@ -13,6 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Objects;
@@ -37,6 +39,8 @@ public class EntityDamagedListener implements Listener {
 
         // Checks if the entity is a player
         Entity entity = event.getEntity();
+        Entity causingEntity = event.getDamageSource().getCausingEntity();
+
         if(entity instanceof Player player) {
             // If the player is infected apply the new slowness effect level
             if (Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true)) {
@@ -59,16 +63,59 @@ public class EntityDamagedListener implements Listener {
             }
 
             // Check for channeling on armor to reduce lightning damage
-            if(event.getDamageSource().getDamageType() == DamageType.LIGHTNING_BOLT)
+            if(event.getDamageSource().getDamageType() == DamageType.LIGHTNING_BOLT || event.getCause() == EntityDamageEvent.DamageCause.LIGHTNING)
             {
                 int levels = 0;
                 for(ItemStack item : player.getInventory().getArmorContents())
-                    if(item != null && item.getType() != Material.AIR)
+                    if(item != null && item.getType() != Material.AIR) {
+                        // Add to the total levels of damage reduction
                         levels += item.getEnchantmentLevel(Enchantment.CHANNELING);
 
+                        // Checks if there is active rain/lightning (so channeling can't charge itself in clear weather)
+                        if(player.getWorld().hasStorm() || player.getWorld().isThundering()) {
+                            // Set the channeling charged tag and enchant glint
+                            ItemMeta meta = item.getItemMeta();
+                            if (meta != null) {
+                                // Set the persistent data
+                                meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "charged"), PersistentDataType.BOOLEAN, true);
+
+                                // Add enchant glint
+                                meta.setEnchantmentGlintOverride(true);
+
+                                // Now set the item's actual meta
+                                item.setItemMeta(meta);
+                            }
+                        }
+
+                    }
+
                 double newDamage = event.getDamage();
-                newDamage = newDamage * (1.0 - ((Math.min(8 * levels, 80) / 100.0)));
+                newDamage = newDamage * (1.0 - ((Math.min(16 * levels, 80) / 100.0)));
                 event.setDamage(newDamage);
+            }
+        }
+
+        // Check for an attack with charged armor if clear
+        if(entity.getWorld().isClearWeather() && causingEntity instanceof Player attacker)
+        {
+            ArmorMeta meta;
+            for(ItemStack item : attacker.getInventory().getArmorContents()) {
+                if (item != null && item.hasItemMeta()) {
+                    meta = (ArmorMeta) item.getItemMeta();
+                    // Check if it has the charged data
+                    if (meta != null && Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "charged"), PersistentDataType.BOOLEAN), true)){
+                        // Unset the charged data
+                        meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "charged"), PersistentDataType.BOOLEAN, false);
+                        meta.setEnchantmentGlintOverride(false);
+                        item.setItemMeta(meta);
+
+                        // Strike lightning at the causing entity
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> entity.getWorld().strikeLightning(entity.getLocation()), 1L);
+
+                        // Break the loop to preserve other item pieces charged status
+                        break;
+                    }
+                }
             }
         }
     }

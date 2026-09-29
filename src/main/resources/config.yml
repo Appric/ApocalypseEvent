@@ -27,6 +27,8 @@ drop-dried-ghasts: true # Sets whether happy ghasts will drop dried ghasts when 
 drop-armor-to-fire: true # Sets whether players will drop their armor to a fire-related death
 
 limit-water: false # Sets whether you can only place water next to undried blocks or not
+lightning-storms: true # Sets whether rain/snow/thunder weather is switched to a more intense lightning storm
+lightning-frequency: 5 # How often in seconds lightning will strike
 freezing-biomes:
   - snowy_taiga
 

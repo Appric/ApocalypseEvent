@@ -32,6 +32,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public int chatMessageRange;
     public int infectTime;
     public int juiceDuration;
+    public int lightningFrequency;
     public Boolean enabled;
     public Boolean limitWater;
     public Boolean heatEnabled;
@@ -42,6 +43,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean infection;
     public Boolean fireOnlyDeathInfected;
     public Boolean customRecipes;
+    public Boolean lightningStorms;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
@@ -89,6 +91,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EntityRegainHealthListener(this, infectionFunctions), this);
         getServer().getPluginManager().registerEvents(new PrepareSmithingListener(this), this);
         getServer().getPluginManager().registerEvents(new PrepareEnchantListener(this), this);
+        getServer().getPluginManager().registerEvents(new WeatherChangeListener(this), this);
 
         // Call function to register the custom recipes
         registerRecipes();
@@ -105,6 +108,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         chatMessageRange = getConfig().getInt("chat-message-range", 20);
         infectTime = getConfig().getInt("infect-time", 300);
         juiceDuration = getConfig().getInt("juice-duration", 90);
+        lightningFrequency = getConfig().getInt("lightning-frequency", 5);
 
         // Set public Booleans
         enabled = getConfig().getBoolean("enabled", true);
@@ -117,6 +121,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         infection = getConfig().getBoolean("infection", true);
         fireOnlyDeathInfected = getConfig().getBoolean("fire-only-death-infected", true);
         customRecipes = getConfig().getBoolean("custom-recipes", true);
+        lightningStorms = getConfig().getBoolean("lightning-storms", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
@@ -274,6 +279,10 @@ public final class ApocalypseEvent extends JavaPlugin {
 
                         // Remove some heat if in water
                         if(player.isInWater())
+                            heat--;
+
+                        // Slightly remove some heat during storms
+                        if(player.getWorld().hasStorm() || player.getWorld().isThundering())
                             heat--;
 
                         // Check if heat is at the threshold
