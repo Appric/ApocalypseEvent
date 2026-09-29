@@ -44,6 +44,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean fireOnlyDeathInfected;
     public Boolean customRecipes;
     public Boolean lightningStorms;
+    public Boolean randomLightning;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
@@ -122,6 +123,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         fireOnlyDeathInfected = getConfig().getBoolean("fire-only-death-infected", true);
         customRecipes = getConfig().getBoolean("custom-recipes", true);
         lightningStorms = getConfig().getBoolean("lightning-storms", true);
+        randomLightning = getConfig().getBoolean("random-lightning", false);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();

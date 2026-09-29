@@ -46,15 +46,26 @@ public class WeatherChangeListener implements Listener {
                             exposedPlayers.add(player.getUniqueId());
                     }
 
-                    // Pick a random player from exposed players
                     if(!exposedPlayers.isEmpty()) {
-                        UUID uuid = exposedPlayers.get(ThreadLocalRandom.current().nextInt(exposedPlayers.size()));
-                        Player player = Bukkit.getPlayer(uuid);
+                        if (plugin.randomLightning) {
+                            // Pick a random player from exposed players
+                            UUID uuid = exposedPlayers.get(ThreadLocalRandom.current().nextInt(exposedPlayers.size()));
+                            Player player = Bukkit.getPlayer(uuid);
 
 
-                        // Strike lightning at the player's location
-                        if (player != null)
-                            player.getWorld().strikeLightning(player.getLocation());
+                            // Strike lightning at the player's location
+                            if (player != null)
+                                player.getWorld().strikeLightning(player.getLocation());
+                        } else {
+                            // Strike all exposed players
+                            for (UUID uuid : exposedPlayers) {
+                                Player player = Bukkit.getPlayer(uuid);
+
+                                // Strike lightning at the player's location
+                                if (player != null)
+                                    player.getWorld().strikeLightning(player.getLocation());
+                            }
+                        }
                     }
                 }, 200L, plugin.lightningFrequency * 20L); // Repeats lightningFrequency seconds
             }
