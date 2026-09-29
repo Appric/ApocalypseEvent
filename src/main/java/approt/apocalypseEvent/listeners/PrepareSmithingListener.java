@@ -10,6 +10,9 @@ import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
+import org.bukkit.persistence.PersistentDataType;
+
+import java.util.Objects;
 
 public class PrepareSmithingListener implements Listener {
 
@@ -30,15 +33,13 @@ public class PrepareSmithingListener implements Listener {
         // Get the result and armor meta
         ItemStack result = event.getResult();
         if(result != null && result.getType() != Material.AIR) {
-            ArmorMeta meta = (ArmorMeta) result.getItemMeta();
-
-            // Check for and apply enchants
-            if(meta != null) {
+            if(result.getItemMeta() instanceof ArmorMeta meta) {
+                // Check for and apply enchants
                 if (meta.hasTrim()) {
                     ArmorTrim trim = meta.getTrim();
-                    if(trim != null) {
+                    if (trim != null) {
                         NamespacedKey key = trim.getMaterial().getKeyOrNull();
-                        if(key != null) {
+                        if (key != null) {
                             // Declare enchant variables
                             Enchantment enchantment;
                             int level = 1;
@@ -49,7 +50,7 @@ public class PrepareSmithingListener implements Listener {
                                     enchantment = Enchantment.MENDING;
                                     break;
                                 case "diamond":
-                                    enchantment  = Enchantment.UNBREAKING;
+                                    enchantment = Enchantment.UNBREAKING;
                                     level = 3;
                                     break;
                                 case "iron":
@@ -85,8 +86,20 @@ public class PrepareSmithingListener implements Listener {
                                     enchantment = Enchantment.PROTECTION;
                             }
 
+                            // Removes enchants to prevent stacking enchants by switching trims
+                            meta.removeEnchantments();
+
+                            // Add back the unbreaking enchant if enabled
+                            if(plugin.unbreakingArmorCraft)
+                                meta.addEnchant(Enchantment.UNBREAKING, 1, false);
+
+                            // Check if the item is charged
+                            if (Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "charged"), PersistentDataType.BOOLEAN), true)) {
+                                meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "charged"), PersistentDataType.BOOLEAN, false);
+                                meta.setEnchantmentGlintOverride(false);
+                            }
+
                             // Actually apply the enchantment to the item
-                            meta.removeEnchantments(); // Removes enchants to prevent stacking enchants by switching trims
                             meta.addEnchant(enchantment, level, false);
                             meta.setEnchantmentGlintOverride(false);
                             result.setItemMeta(meta);

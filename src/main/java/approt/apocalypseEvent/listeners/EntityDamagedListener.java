@@ -75,15 +75,18 @@ public class EntityDamagedListener implements Listener {
                         if(player.getWorld().hasStorm() || player.getWorld().isThundering()) {
                             // Set the channeling charged tag and enchant glint
                             ItemMeta meta = item.getItemMeta();
-                            if (meta != null) {
-                                // Set the persistent data
-                                meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "charged"), PersistentDataType.BOOLEAN, true);
+                            if (meta instanceof ArmorMeta) {
+                                //Check if the item has channeling
+                                if(meta.hasEnchant(Enchantment.CHANNELING)) {
+                                    // Set the persistent data
+                                    meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "charged"), PersistentDataType.BOOLEAN, true);
 
-                                // Add enchant glint
-                                meta.setEnchantmentGlintOverride(true);
+                                    // Add enchant glint
+                                    meta.setEnchantmentGlintOverride(true);
 
-                                // Now set the item's actual meta
-                                item.setItemMeta(meta);
+                                    // Now set the item's actual meta
+                                    item.setItemMeta(meta);
+                                }
                             }
                         }
 

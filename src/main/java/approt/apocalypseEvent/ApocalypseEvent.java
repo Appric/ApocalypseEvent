@@ -45,6 +45,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean customRecipes;
     public Boolean lightningStorms;
     public Boolean randomLightning;
+    public Boolean unbreakingArmorCraft;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
@@ -93,6 +94,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PrepareSmithingListener(this), this);
         getServer().getPluginManager().registerEvents(new PrepareEnchantListener(this), this);
         getServer().getPluginManager().registerEvents(new WeatherChangeListener(this), this);
+        getServer().getPluginManager().registerEvents(new PrepareCraftListener(this), this);
 
         // Call function to register the custom recipes
         registerRecipes();
@@ -124,6 +126,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         customRecipes = getConfig().getBoolean("custom-recipes", true);
         lightningStorms = getConfig().getBoolean("lightning-storms", true);
         randomLightning = getConfig().getBoolean("random-lightning", false);
+        unbreakingArmorCraft = getConfig().getBoolean("unbreaking-armor-craft", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();

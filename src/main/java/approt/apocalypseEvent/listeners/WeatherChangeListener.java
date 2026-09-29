@@ -2,6 +2,7 @@ package approt.apocalypseEvent.listeners;
 
 import approt.apocalypseEvent.ApocalypseEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,7 +43,7 @@ public class WeatherChangeListener implements Listener {
                     for(Player player : Bukkit.getOnlinePlayers())
                     {
                         // Check if they are exposed to the sky
-                        if(player.getLocation().getY() >= player.getWorld().getHighestBlockYAt(player.getLocation()))
+                        if(player.getGameMode() != GameMode.SPECTATOR && player.getGameMode() != GameMode.CREATIVE && player.getLocation().getY() >= player.getWorld().getHighestBlockYAt(player.getLocation()))
                             exposedPlayers.add(player.getUniqueId());
                     }
 
