@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
@@ -42,7 +43,7 @@ public class InfectionFunctions {
         int additionalTime = 0;
         ArmorMeta meta;
         for(ItemStack item : player.getInventory().getArmorContents()) {
-            if (item != null && item.hasItemMeta()) {
+            if (item != null && item.getItemMeta() instanceof ArmorMeta) {
                 meta = (ArmorMeta) item.getItemMeta();
                 if (meta != null && meta.hasTrim() && Objects.requireNonNull(meta.getTrim()).getMaterial() == TrimMaterial.GOLD)
                     additionalTime += 30;
@@ -73,6 +74,14 @@ public class InfectionFunctions {
 
         // Add the effects
         ApplyInfectedEffects(player);
+
+        // If enabled reset their waypoint receive range
+        if(plugin.limitLocatorBar)
+        {
+            AttributeInstance attribute = player.getAttribute(Attribute.WAYPOINT_RECEIVE_RANGE);
+            if (attribute != null)
+                attribute.setBaseValue(60000000); // The default waypoint receive range for a player is 60,000,0000
+        }
     }
 
     public void CureInfected(Player player)
@@ -104,6 +113,14 @@ public class InfectionFunctions {
             }
 
             team.addEntry(player.getName());
+        }
+
+        // Sets the waypoint receive range back to 0 if enabled
+        if(plugin.limitLocatorBar)
+        {
+            AttributeInstance attribute = player.getAttribute(Attribute.WAYPOINT_RECEIVE_RANGE);
+            if(attribute != null)
+                attribute.setBaseValue(0);
         }
 
         // Unset the persistent infected data

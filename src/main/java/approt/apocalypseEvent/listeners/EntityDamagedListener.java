@@ -103,7 +103,7 @@ public class EntityDamagedListener implements Listener {
         {
             ArmorMeta meta;
             for(ItemStack item : attacker.getInventory().getArmorContents()) {
-                if (item != null && item.hasItemMeta()) {
+                if (item != null && item.getItemMeta() instanceof ArmorMeta) {
                     meta = (ArmorMeta) item.getItemMeta();
                     // Check if it has the charged data
                     if (meta != null && Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "charged"), PersistentDataType.BOOLEAN), true)){
