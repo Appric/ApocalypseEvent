@@ -41,7 +41,7 @@ fire-only-death-infected: true # Sets whether fire-related damage is the only wa
 less-infected-health: 2 # Sets how much maximum health infected players lose (in half-hearts so 2 is a full heart). Use 0 to disable.
 
 custom-recipes: true # Sets whether to use the custom recipes
-juice-duration: 90 # Sets the amount of seconds the juice effects last
+juice-duration: 60 # Sets the amount of seconds the juice effects last
 
 lightning-storms: true # Sets whether rain/snow/thunder weather is switched to a more intense lightning storm
 random-lightning: false # Sets whether to strike players at random (if false then it will strike all players exposed to the sky)

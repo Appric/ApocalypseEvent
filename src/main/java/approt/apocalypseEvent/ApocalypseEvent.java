@@ -115,7 +115,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         deathMessageRange = getConfig().getInt("death-message-range", 20);
         chatMessageRange = getConfig().getInt("chat-message-range", 20);
         infectTime = getConfig().getInt("infect-time", 300);
-        juiceDuration = getConfig().getInt("juice-duration", 90);
+        juiceDuration = getConfig().getInt("juice-duration", 60);
         lightningFrequency = getConfig().getInt("lightning-frequency", 5);
         lessInfectedHealth = getConfig().getInt("less-infected-health", 2);
 
