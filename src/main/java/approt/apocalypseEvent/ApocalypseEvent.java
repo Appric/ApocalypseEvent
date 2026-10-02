@@ -33,6 +33,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public int infectTime;
     public int juiceDuration;
     public int lightningFrequency;
+    public int lessInfectedHealth;
     public Boolean enabled;
     public Boolean limitWater;
     public Boolean heatEnabled;
@@ -113,6 +114,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         infectTime = getConfig().getInt("infect-time", 300);
         juiceDuration = getConfig().getInt("juice-duration", 90);
         lightningFrequency = getConfig().getInt("lightning-frequency", 5);
+        lessInfectedHealth = getConfig().getInt("less-infected-health", 2);
 
         // Set public Booleans
         enabled = getConfig().getBoolean("enabled", true);

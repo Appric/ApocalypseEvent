@@ -2,6 +2,8 @@ package approt.apocalypseEvent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -33,6 +35,19 @@ public class ApocalypseEventCommand implements CommandExecutor {
             // Unregister then register the recipes based on the new config values
             plugin.unregisterRecipes();
             plugin.registerRecipes();
+
+            // Updated online infected player's health
+            if(plugin.lessInfectedHealth > -1) {
+                for (Player update : Bukkit.getOnlinePlayers()) {
+                    if(Objects.equals(update.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true)) {
+                        // Check and set how much maximum health infected players lose
+                        AttributeInstance attribute = update.getAttribute(Attribute.MAX_HEALTH);
+                        if (attribute != null) {
+                            attribute.setBaseValue(attribute.getDefaultValue() - plugin.lessInfectedHealth);
+                        }
+                    }
+                }
+            }
 
             // Send the reloaded message
             sender.sendMessage("§6[ApocalypseEvent] §aThe config has been reloaded!§r");

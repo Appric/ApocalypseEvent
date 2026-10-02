@@ -82,6 +82,14 @@ public class InfectionFunctions {
             if (attribute != null)
                 attribute.setBaseValue(60000000); // The default waypoint receive range for a player is 60,000,0000
         }
+
+        // Check and set how much maximum health infected players lose
+        if(plugin.lessInfectedHealth > 0)
+        {
+            AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
+            if (attribute != null)
+                attribute.setBaseValue(attribute.getDefaultValue() - plugin.lessInfectedHealth);
+        }
     }
 
     public void CureInfected(Player player)
@@ -125,6 +133,14 @@ public class InfectionFunctions {
 
         // Unset the persistent infected data
         player.getPersistentDataContainer().set(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN, false);
+
+        // Check and reset the maximum health of the infected player
+        if(plugin.lessInfectedHealth > 0)
+        {
+            AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
+            if (attribute != null)
+                attribute.setBaseValue(attribute.getDefaultValue());
+        }
 
         // Clear infected effects
         player.removePotionEffect(PotionEffectType.SLOWNESS);
