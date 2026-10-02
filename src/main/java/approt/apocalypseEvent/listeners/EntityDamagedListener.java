@@ -54,7 +54,7 @@ public class EntityDamagedListener implements Listener {
                     if(player.getHealth() - event.getDamage() < 1)
                     {
                         // Checks if it was fire damage
-                        if(!(plugin.fireDamageTypes.contains(event.getDamageSource().getDamageType()) || player.getFireTicks() > 0)) {
+                        if(!(plugin.fireDamageTypes.contains(event.getDamageSource().getDamageType()) || player.getFireTicks() > 0 || event.getDamageSource().getDamageType() == DamageType.WITHER)) {
                             event.setDamage(player.getHealth() - 1);
                         }
                     }

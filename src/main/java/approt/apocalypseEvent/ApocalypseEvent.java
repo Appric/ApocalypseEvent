@@ -48,6 +48,9 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean randomLightning;
     public Boolean unbreakingArmorCraft;
     public Boolean limitLocatorBar;
+    public Boolean waterCanTreat;
+    public Boolean poisonousWater;
+    public Biome treatBiome;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
@@ -82,7 +85,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         // Register listeners
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
         getServer().getPluginManager().registerEvents(new BucketEmptyListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerMoveListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerMoveListener(this, infectionFunctions), this);
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerRespawnListener(this, infectionFunctions), this);
@@ -131,6 +134,8 @@ public final class ApocalypseEvent extends JavaPlugin {
         randomLightning = getConfig().getBoolean("random-lightning", false);
         unbreakingArmorCraft = getConfig().getBoolean("unbreaking-armor-craft", true);
         limitLocatorBar = getConfig().getBoolean("limit-locator-bar", true);
+        waterCanTreat = getConfig().getBoolean("water-can-treat", true);
+        poisonousWater = getConfig().getBoolean("poisonous-water", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
@@ -155,6 +160,9 @@ public final class ApocalypseEvent extends JavaPlugin {
             if(biome != null)
                 freezingBiomes.add(biome);
         }
+
+        // Converts the treat-biome name to a biome
+        treatBiome = Registry.BIOME.get(NamespacedKey.fromString(getConfig().getString("treat-biome", "cherry_grove")));
     }
 
     // Function to reapply repeating tasks when toggled if applicable

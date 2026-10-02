@@ -27,8 +27,11 @@ drop-dried-ghasts: true # Sets whether happy ghasts will drop dried ghasts when 
 drop-armor-to-fire: true # Sets whether players will drop their armor to a fire-related death
 unbreaking-armor-craft: true # Sets whether armor will automatically get unbreaking I when crafted
 limit-locator-bar: true # Sets whether the locator bar is only received by infected players
+water-can-treat: true # Sets whether water in the treat-biome biome will treat a player under infection time, but before converting
+treat-biome: "cherry_grove"
 
 limit-water: false # Sets whether you can only place water next to undried blocks or not
+poisonous-water: true # Sets whether water in the map poisons the player (except for the Cherry Grove biome if water-can-treat is enabled)
 freezing-biomes:
   - snowy_taiga
 
