@@ -38,6 +38,10 @@ public class ApocalypseEventCommand implements CommandExecutor {
             plugin.unregisterRecipes();
             plugin.registerRecipes();
 
+            // Refresh commands
+            for(Player temp : Bukkit.getOnlinePlayers())
+                temp.updateCommands();
+
             // Updated online infected player's health
             if(plugin.lessInfectedHealth > -1) {
                 for (Player update : Bukkit.getOnlinePlayers()) {
