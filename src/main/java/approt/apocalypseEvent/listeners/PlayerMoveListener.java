@@ -1,27 +1,20 @@
 package approt.apocalypseEvent.listeners;
 
 import approt.apocalypseEvent.ApocalypseEvent;
-import approt.apocalypseEvent.InfectionFunctions;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.persistence.PersistentDataType;
-
-import java.util.Objects;
 
 public class PlayerMoveListener implements Listener {
 
     // Connect to the main and InfectedFunctions class
     private final ApocalypseEvent plugin;
-    private final InfectionFunctions infectionFunctions;
 
-    public PlayerMoveListener(ApocalypseEvent plugin, InfectionFunctions infectionFunctions) {
+    public PlayerMoveListener(ApocalypseEvent plugin) {
         this.plugin = plugin;
-        this.infectionFunctions = infectionFunctions;
     }
 
     @EventHandler

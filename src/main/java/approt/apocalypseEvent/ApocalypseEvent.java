@@ -92,7 +92,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         // Register listeners
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
         getServer().getPluginManager().registerEvents(new BucketEmptyListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerMoveListener(this, infectionFunctions), this);
+        getServer().getPluginManager().registerEvents(new PlayerMoveListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockBreakListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerRespawnListener(this, infectionFunctions), this);
