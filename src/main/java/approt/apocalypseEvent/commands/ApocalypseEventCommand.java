@@ -1,5 +1,7 @@
-package approt.apocalypseEvent;
+package approt.apocalypseEvent.commands;
 
+import approt.apocalypseEvent.ApocalypseEvent;
+import approt.apocalypseEvent.InfectionFunctions;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;

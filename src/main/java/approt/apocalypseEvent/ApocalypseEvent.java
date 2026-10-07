@@ -1,5 +1,7 @@
 package approt.apocalypseEvent;
 
+import approt.apocalypseEvent.commands.ApocalypseEventCommand;
+import approt.apocalypseEvent.commands.ApocalypseEventTabCompleter;
 import approt.apocalypseEvent.listeners.*;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
