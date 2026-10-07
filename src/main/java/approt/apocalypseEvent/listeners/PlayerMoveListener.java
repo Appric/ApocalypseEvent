@@ -50,24 +50,10 @@ public class PlayerMoveListener implements Listener {
             }
         }
 
-        // Check if they are in water
-        if(player.isInWater())
+        // Check if they are in water and call the water effect repeating task if they don't already have it
+        if(player.isInWater() && !plugin.waterEffectTasks.containsKey(player.getUniqueId()))
         {
-            // Gets if the player is infected or not
-            boolean infected = Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true);
-
-            // Checks if water can treat infected and in the proper biome
-            if(plugin.waterCanTreat && (fromBiome == plugin.treatBiome || toBiome == plugin.treatBiome))
-            {
-                // Don't cure infected players
-                if(!infected)
-                    infectionFunctions.CureInfected(player);
-            }
-            // Call the water effect repeating task if they don't already have it
-            else if(plugin.deadlyWater && !plugin.waterEffectTasks.containsKey(player.getUniqueId()))
-            {
-                plugin.applyWaterEffects(player);
-            }
+            plugin.applyWaterEffects(player);
         }
     }
 }

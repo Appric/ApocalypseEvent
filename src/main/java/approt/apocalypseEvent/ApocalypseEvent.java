@@ -415,6 +415,20 @@ public final class ApocalypseEvent extends JavaPlugin {
             public void run() {
                 // Checks if it's enabled, the player is online, exists, is alive, and is still in water
                 if(enabled && deadlyWater && player.isOnline() && player.isValid() && !player.isDead() && player.isInWater()) {
+                    // Checks if they are infected
+                    boolean infected = Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(ApocalypseEvent.this, "infected"), PersistentDataType.BOOLEAN), true);
+
+                    // Checks if they should be treated
+                    if(waterCanTreat && player.getWorld().getBiome(player.getLocation()) == treatBiome)
+                    {
+                        // Don't cure infected players
+                        if(!infected)
+                            infectionFunctions.CureInfected(player);
+
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 0, false));
+                        return;
+                    }
+
                     // If the player has aqua affinity they are immune to deadly water
                     for(ItemStack item : player.getInventory().getArmorContents())
                         if(item != null && item.hasItemMeta())
@@ -422,7 +436,7 @@ public final class ApocalypseEvent extends JavaPlugin {
                                 return;
 
                     // Water is more deadly to infected players
-                    if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(ApocalypseEvent.this, "infected"), PersistentDataType.BOOLEAN), true)) {
+                    if(infected) {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60, 1, true));
                     }
                     else {
