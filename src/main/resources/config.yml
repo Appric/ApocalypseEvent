@@ -31,7 +31,7 @@ water-can-treat: true # Sets whether water in the treat-biome biome will treat a
 treat-biome: "cherry_grove"
 
 limit-water: false # Sets whether you can only place water next to undried blocks or not
-poisonous-water: true # Sets whether water in the map poisons the player (except for the Cherry Grove biome if water-can-treat is enabled)
+deadly-water: true # Sets whether water in the map poisons/withers the player (except for the trat-biome biome if water-can-treat is enabled)
 freezing-biomes:
   - snowy_taiga
 

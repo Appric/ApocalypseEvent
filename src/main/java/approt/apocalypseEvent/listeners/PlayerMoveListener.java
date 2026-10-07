@@ -10,8 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
 
@@ -65,24 +63,10 @@ public class PlayerMoveListener implements Listener {
                 if(!infected)
                     infectionFunctions.CureInfected(player);
             }
-            else if(plugin.poisonousWater)
+            // Call the water effect repeating task if they don't already have it
+            else if(plugin.deadlyWater && !plugin.waterEffectTasks.containsKey(player.getUniqueId()))
             {
-                // Potion Effect variable
-                PotionEffect effect;
-
-                // Water is more deadly to infected players
-                if(infected) {
-                    effect = player.getPotionEffect(PotionEffectType.WITHER);
-                    // Check if effect is low enough
-                    if(effect == null || effect.getDuration() < 40)
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60, 1, true));
-                }
-                else {
-                    effect = player.getPotionEffect(PotionEffectType.POISON);
-                    // Check if effect is low enough
-                    if(effect == null || effect.getDuration() < 40)
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 0, true));
-                }
+                plugin.applyWaterEffects(player);
             }
         }
     }

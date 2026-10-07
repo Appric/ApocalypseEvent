@@ -49,7 +49,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean unbreakingArmorCraft;
     public Boolean limitLocatorBar;
     public Boolean waterCanTreat;
-    public Boolean poisonousWater;
+    public Boolean deadlyWater;
     public Biome treatBiome;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
@@ -57,6 +57,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public HashMap<UUID, BukkitTask> freezeTickTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> applyHeatTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> infectTasks = new HashMap<>();
+    public HashMap<UUID, BukkitTask> waterEffectTasks = new HashMap<>();
 
     // List of fire related damage types
     public List<DamageType> fireDamageTypes = new ArrayList<>(List.of(DamageType.IN_FIRE, DamageType.ON_FIRE, DamageType.CAMPFIRE, DamageType.LAVA, DamageType.FIREBALL, DamageType.UNATTRIBUTED_FIREBALL, DamageType.DRY_OUT, DamageType.HOT_FLOOR, DamageType.SULFUR_CUBE_HOT));
@@ -135,7 +136,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         unbreakingArmorCraft = getConfig().getBoolean("unbreaking-armor-craft", true);
         limitLocatorBar = getConfig().getBoolean("limit-locator-bar", true);
         waterCanTreat = getConfig().getBoolean("water-can-treat", true);
-        poisonousWater = getConfig().getBoolean("poisonous-water", true);
+        deadlyWater = getConfig().getBoolean("deadly-water", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
@@ -182,6 +183,10 @@ public final class ApocalypseEvent extends JavaPlugin {
         Objective objective = scoreboard.getObjective("infectCount");
         if(infection && objective != null && objective.getScore(player.getName()).getScore() > 0)
             applyInfectionTime(player);
+
+        // Apply deadly water if enabled and in water
+        if(deadlyWater && player.isInWater())
+            applyWaterEffects(player);
     }
 
     // Function to remove repeating tasks
@@ -203,6 +208,11 @@ public final class ApocalypseEvent extends JavaPlugin {
         if(infectTasks.containsKey(uuid))
             infectTasks.get(uuid).cancel();
         infectTasks.remove(uuid);
+
+        // Water
+        if(waterEffectTasks.containsKey(uuid))
+            waterEffectTasks.get(uuid).cancel();
+        waterEffectTasks.remove(uuid);
     }
 
     // Function to schedule the repeating freeze tick task
@@ -394,6 +404,38 @@ public final class ApocalypseEvent extends JavaPlugin {
                 }
             }
         }.runTaskTimer(this, 0L, time * 20L)); // The 0 is when to start and the 20 is how many ticks later to run again (time in seconds)
+    }
+
+    // Function to apply water effects
+    public void applyWaterEffects(Player player)
+    {
+        // Schedule a repeating task to apply effects from the water
+        waterEffectTasks.put(player.getUniqueId(), new BukkitRunnable() {
+            @Override
+            public void run() {
+                // Checks if it's enabled, the player is online, exists, is alive, and is still in water
+                if(enabled && deadlyWater && player.isOnline() && player.isValid() && !player.isDead() && player.isInWater()) {
+                    // If the player has aqua affinity they are immune to deadly water
+                    for(ItemStack item : player.getInventory().getArmorContents())
+                        if(item != null && item.hasItemMeta())
+                            if(Objects.requireNonNull(item.getItemMeta()).hasEnchant(Enchantment.AQUA_AFFINITY))
+                                return;
+
+                    // Water is more deadly to infected players
+                    if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(ApocalypseEvent.this, "infected"), PersistentDataType.BOOLEAN), true)) {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60, 1, true));
+                    }
+                    else {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 0, true));
+                    }
+                }
+                else // Cancels the event when it is no longer valid
+                {
+                    waterEffectTasks.remove(player.getUniqueId());
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(this, 0L, 40L)); // The 0 is when to start and the 1 is how many ticks later to run again
     }
 
     // Function to register all custom recipes

@@ -7,6 +7,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
@@ -44,6 +45,9 @@ public class PrepareSmithingListener implements Listener {
                             Enchantment enchantment;
                             int level = 1;
 
+                            // Removes enchants to prevent stacking enchants by switching trims
+                            meta.removeEnchantments();
+
                             // Check for material type
                             switch (key.getKey()) {
                                 case "netherite", "amethyst":
@@ -52,6 +56,9 @@ public class PrepareSmithingListener implements Listener {
                                 case "diamond":
                                     enchantment = Enchantment.UNBREAKING;
                                     level = 3;
+                                    // Also checks if it is a helmet to additionally apply aqua affinity
+                                    if(result.getType().getEquipmentSlot() == EquipmentSlot.HEAD)
+                                        meta.addEnchant(Enchantment.AQUA_AFFINITY, 1, false);
                                     break;
                                 case "iron":
                                     enchantment = Enchantment.PROTECTION;
@@ -67,6 +74,9 @@ public class PrepareSmithingListener implements Listener {
                                 case "emerald":
                                     enchantment = Enchantment.THORNS;
                                     level = 2;
+                                    // Also checks if it is not a helmet to additionally apply aqua affinity
+                                    if(result.getType().getEquipmentSlot() != EquipmentSlot.HEAD)
+                                        meta.addEnchant(Enchantment.AQUA_AFFINITY, 1, false);
                                     break;
                                 case "lapis":
                                     enchantment = Enchantment.BLAST_PROTECTION;
@@ -81,9 +91,6 @@ public class PrepareSmithingListener implements Listener {
                                 default:
                                     enchantment = Enchantment.PROTECTION;
                             }
-
-                            // Removes enchants to prevent stacking enchants by switching trims
-                            meta.removeEnchantments();
 
                             // Add back the unbreaking enchant if enabled
                             if(plugin.unbreakingArmorCraft)
