@@ -75,12 +75,8 @@ public class PrepareSmithingListener implements Listener {
                                 case "quartz":
                                     enchantment = Enchantment.WIND_BURST;
                                     break;
-                                case "redstone":
+                                case "resin", "redstone":
                                     enchantment = Enchantment.FIRE_PROTECTION;
-                                    break;
-                                case "resin":
-                                    enchantment = Enchantment.FIRE_PROTECTION;
-                                    level = 2;
                                     break;
                                 default:
                                     enchantment = Enchantment.PROTECTION;
