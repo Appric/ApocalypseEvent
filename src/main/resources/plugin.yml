@@ -9,10 +9,16 @@ authors: [ approt ]
 commands:
   apocalypseevent:
     description: The primary command for the ApocalypseEvent plugin.
-    aliases: [ae,apoc,apocalypse]
+    aliases: [ae, apoc, apocalypse]
     permission: apocalypseevent
     permission-message: You do not have permission to use that command!
     usage: "Incorrect usage! Example: /<command> parameter"
+  whisper:
+    description: A proximity based version of Minecraft's whisper command
+    aliases: [w, tell, msg, message]
+    permission: apocalypseevent.whisper
+    permission-message: You do not have permission to use that command!
+    usage: "Incorrect usage! Example: /<command> player message"
 
 permissions:
   apocalypseevent:
@@ -29,3 +35,6 @@ permissions:
         description: Allows players to cure an infected player with /apocalypseevent cure
       apocalypseevent.convert:
         description: Allows players to instantly convert a player to become infected with /apocalypseevent convert
+  apocalypseevent.whisper:
+    default: true
+    description: Allows players to use ApocalypseEvent's proximity based whisper command.

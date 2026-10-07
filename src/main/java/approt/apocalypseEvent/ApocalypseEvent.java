@@ -2,6 +2,8 @@ package approt.apocalypseEvent;
 
 import approt.apocalypseEvent.commands.ApocalypseEventCommand;
 import approt.apocalypseEvent.commands.ApocalypseEventTabCompleter;
+import approt.apocalypseEvent.commands.WhisperCommand;
+import approt.apocalypseEvent.commands.WhisperTabCompleter;
 import approt.apocalypseEvent.listeners.*;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -79,11 +81,13 @@ public final class ApocalypseEvent extends JavaPlugin {
         // Adds the InfectionFunctions class
         this.infectionFunctions = new InfectionFunctions(this);
 
-        // Register the command
+        // Register the commands
         Objects.requireNonNull(getCommand("apocalypseevent")).setExecutor(new ApocalypseEventCommand(this, infectionFunctions));
+        Objects.requireNonNull(getCommand("whisper")).setExecutor(new WhisperCommand(this));
 
-        // Register the tab completer
+        // Register the tab completers
         Objects.requireNonNull(getCommand("apocalypseevent")).setTabCompleter(new ApocalypseEventTabCompleter());
+        Objects.requireNonNull(getCommand("whisper")).setTabCompleter(new WhisperTabCompleter());
 
         // Register listeners
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
