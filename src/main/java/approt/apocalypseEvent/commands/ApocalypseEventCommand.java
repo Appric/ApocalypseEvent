@@ -67,6 +67,10 @@ public class ApocalypseEventCommand implements CommandExecutor {
             plugin.saveConfig();
             plugin.loadConfigValues();
 
+            // Refresh commands
+            for(Player temp : Bukkit.getOnlinePlayers())
+                temp.updateCommands();
+
             if(plugin.enabled) {
                 // Reinstate repeating tasks for all online players
                 for(Player player : Bukkit.getOnlinePlayers())

@@ -107,6 +107,8 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PrepareEnchantListener(this), this);
         getServer().getPluginManager().registerEvents(new WeatherChangeListener(this), this);
         getServer().getPluginManager().registerEvents(new PrepareCraftListener(this), this);
+        getServer().getPluginManager().registerEvents(new CommandPreprocessListener(this), this);
+        getServer().getPluginManager().registerEvents(new CommandListener(this), this);
 
         // Call function to register the custom recipes
         registerRecipes();

@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class PlayerMoveListener implements Listener {
 
-    // Connect to the main and InfectedFunctions class
+    // Connect to the main class
     private final ApocalypseEvent plugin;
 
     public PlayerMoveListener(ApocalypseEvent plugin) {
