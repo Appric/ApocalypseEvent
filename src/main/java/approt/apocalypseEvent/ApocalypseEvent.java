@@ -2,8 +2,6 @@ package approt.apocalypseEvent;
 
 import approt.apocalypseEvent.commands.ApocalypseEventCommand;
 import approt.apocalypseEvent.commands.ApocalypseEventTabCompleter;
-import approt.apocalypseEvent.commands.WhisperCommand;
-import approt.apocalypseEvent.commands.WhisperTabCompleter;
 import approt.apocalypseEvent.listeners.*;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -84,11 +82,9 @@ public final class ApocalypseEvent extends JavaPlugin {
 
         // Register the commands
         Objects.requireNonNull(getCommand("apocalypseevent")).setExecutor(new ApocalypseEventCommand(this, infectionFunctions));
-        Objects.requireNonNull(getCommand("whisper")).setExecutor(new WhisperCommand(this));
 
         // Register the tab completers
         Objects.requireNonNull(getCommand("apocalypseevent")).setTabCompleter(new ApocalypseEventTabCompleter());
-        Objects.requireNonNull(getCommand("whisper")).setTabCompleter(new WhisperTabCompleter());
 
         // Register listeners
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
@@ -109,7 +105,6 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new WeatherChangeListener(this), this);
         getServer().getPluginManager().registerEvents(new PrepareCraftListener(this), this);
         getServer().getPluginManager().registerEvents(new CommandPreprocessListener(this), this);
-        getServer().getPluginManager().registerEvents(new CommandListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 
         // Call function to register the custom recipes
