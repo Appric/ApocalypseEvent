@@ -42,6 +42,7 @@ less-infected-health: 2 # Sets how much maximum health infected players lose (in
 
 custom-recipes: true # Sets whether to use the custom recipes
 juice-duration: 60 # Sets the amount of seconds the juice effects last
+speedy-cakes: true # Sets whether cakes grant a speed boost on consumption
 
 lightning-storms: true # Sets whether rain/snow/thunder weather is switched to a more intense lightning storm
 random-lightning: false # Sets whether to strike players at random (if false then it will strike all players exposed to the sky)

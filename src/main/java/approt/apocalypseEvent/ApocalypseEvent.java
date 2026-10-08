@@ -54,6 +54,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean limitLocatorBar;
     public Boolean waterCanTreat;
     public Boolean deadlyWater;
+    public Boolean speedyCakes;
     public Biome treatBiome;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
@@ -109,6 +110,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PrepareCraftListener(this), this);
         getServer().getPluginManager().registerEvents(new CommandPreprocessListener(this), this);
         getServer().getPluginManager().registerEvents(new CommandListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 
         // Call function to register the custom recipes
         registerRecipes();
@@ -145,6 +147,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         limitLocatorBar = getConfig().getBoolean("limit-locator-bar", true);
         waterCanTreat = getConfig().getBoolean("water-can-treat", true);
         deadlyWater = getConfig().getBoolean("deadly-water", true);
+        speedyCakes = getConfig().getBoolean("speedy-cakes", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
