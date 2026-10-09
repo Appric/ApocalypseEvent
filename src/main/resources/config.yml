@@ -47,3 +47,7 @@ speedy-cakes: true # Sets whether cakes grant a speed boost on consumption
 lightning-storms: true # Sets whether rain/snow/thunder weather is switched to a more intense lightning storm
 random-lightning: false # Sets whether to strike players at random (if false then it will strike all players exposed to the sky)
 lightning-frequency: 5 # How often in seconds lightning will strike
+
+admin-teams:
+  - "Admin"
+  - "Mod"

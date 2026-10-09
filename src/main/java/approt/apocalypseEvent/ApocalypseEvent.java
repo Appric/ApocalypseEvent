@@ -23,6 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 
@@ -57,6 +58,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
+    public List<Team> adminTeams = new ArrayList<>();
     public HashMap<UUID, BukkitTask> freezeTickTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> applyHeatTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> infectTasks = new HashMap<>();
@@ -170,6 +172,14 @@ public final class ApocalypseEvent extends JavaPlugin {
 
         // Converts the treat-biome name to a biome
         treatBiome = Registry.BIOME.get(NamespacedKey.fromString(getConfig().getString("treat-biome", "cherry_grove")));
+
+        // Converts team names to teams and puts them in the adminTeams list
+        adminTeams.clear();
+        for (String name : getConfig().getStringList("admin-teams")) {
+            Team team = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard().getTeam(name);
+            if(team != null)
+                adminTeams.add(team);
+        }
     }
 
     // Function to reapply repeating tasks when toggled if applicable

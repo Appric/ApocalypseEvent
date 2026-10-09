@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.Team;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -84,6 +85,17 @@ public class PlayerDeathListener implements Listener {
                     receiver = (Player) entity;
                     receiver.sendMessage(message);
                     receiver.playSound(receiver, Sound.BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundCategory.AMBIENT, 1, 1);
+                }
+            }
+
+            // Send the message to players on an admin team and not in range
+            for(Team temp : plugin.adminTeams)
+            {
+                for(String string: temp.getEntries())
+                {
+                    Player teamPlayer = Bukkit.getPlayer(string);
+                    if(teamPlayer != null && !nearbyEntities.contains(teamPlayer))
+                        teamPlayer.sendMessage("§6--§r" + message);
                 }
             }
         }

@@ -8,9 +8,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Objects;
 
 public class CommandPreprocessListener implements Listener {
 
@@ -44,13 +46,11 @@ public class CommandPreprocessListener implements Listener {
 
             // Checks if the message starts with any of those names
             boolean match = false;
-            String commandStart;
             for(String string : commandNames)
             {
                 if(message.startsWith("/" + string))
                 {
                     match = true;
-                    commandStart = "/" + string + " ";
                     break;
                 }
             }
@@ -61,6 +61,12 @@ public class CommandPreprocessListener implements Listener {
                 // Get the players
                 Player sender = event.getPlayer();
                 Player target;
+
+                // Checks if the sender is on an admin team
+                Team team = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard().getEntryTeam(sender.getName());
+                if(team != null && plugin.adminTeams.contains(team))
+                    return;
+
                 if(message.split(message).length > 1)
                     target = Bukkit.getPlayer(message.split(message)[1]);
                 else
@@ -70,8 +76,9 @@ public class CommandPreprocessListener implements Listener {
                 if(target == null || !Bukkit.getOnlinePlayers().contains(target))
                     return;
 
-                // Checks if the player is outside the range
-                if(sender.getLocation().distanceSquared(target.getLocation()) > Math.pow(plugin.chatMessageRange, 2))
+                // Checks if the player is outside the range (except admin team players)
+                team = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard().getEntryTeam(target.getName());
+                if(sender.getLocation().distanceSquared(target.getLocation()) > Math.pow(plugin.chatMessageRange, 2) && (team == null || !plugin.adminTeams.contains(team)))
                 {
                     event.setCancelled(true);
                     sender.sendMessage("§6[ApocalypseEvent] §cThis player is out of range!§r");

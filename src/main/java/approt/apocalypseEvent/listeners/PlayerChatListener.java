@@ -59,10 +59,21 @@ public class PlayerChatListener implements Listener {
                 int range = Math.max(plugin.chatMessageRange, 0);
                 Collection<Entity> nearbyEntities = Objects.requireNonNull(location.getWorld()).getNearbyEntities(location, range, range, range);
 
-                // Send the message manually and only to players in range
+                // Send the message manually to players in range
                 for(Entity entity : nearbyEntities)
                     if(entity instanceof Player)
                         entity.sendMessage(message);
+
+                // Send the message to players on an admin team and not in range
+                for(Team temp : plugin.adminTeams)
+                {
+                    for(String string: temp.getEntries())
+                    {
+                        Player teamPlayer = Bukkit.getPlayer(string);
+                        if(teamPlayer != null && !nearbyEntities.contains(teamPlayer))
+                            teamPlayer.sendMessage("§6--§r" + message);
+                    }
+                }
             });
         }
     }
