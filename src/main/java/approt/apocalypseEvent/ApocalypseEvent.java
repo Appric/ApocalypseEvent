@@ -444,15 +444,21 @@ public final class ApocalypseEvent extends JavaPlugin {
                         return;
                     }
 
-                    // If the player has aqua affinity they are immune to deadly water
+                    // If the player has aqua affinity and is not infected they are immune to deadly water
+                    boolean wearingAquaAffinity = false;
                     for(ItemStack item : player.getInventory().getArmorContents())
-                        if(item != null && item.hasItemMeta())
-                            if(Objects.requireNonNull(item.getItemMeta()).hasEnchant(Enchantment.AQUA_AFFINITY))
+                        if(item != null && item.hasItemMeta()) {
+                            wearingAquaAffinity = Objects.requireNonNull(item.getItemMeta()).hasEnchant(Enchantment.AQUA_AFFINITY);
+                            if (wearingAquaAffinity && !infected)
                                 return;
+                        }
 
                     // Water is more deadly to infected players
                     if(infected) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60, 1, true));
+                        if(wearingAquaAffinity) // Aqua affinity reduces the effects of water for infected, but does not remove it
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60, 0, true));
+                        else
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60, 1, true));
                     }
                     else {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 0, true));
