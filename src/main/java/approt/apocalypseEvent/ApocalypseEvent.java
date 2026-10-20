@@ -449,8 +449,11 @@ public final class ApocalypseEvent extends JavaPlugin {
                     for(ItemStack item : player.getInventory().getArmorContents())
                         if(item != null && item.hasItemMeta()) {
                             wearingAquaAffinity = Objects.requireNonNull(item.getItemMeta()).hasEnchant(Enchantment.AQUA_AFFINITY);
-                            if (wearingAquaAffinity && !infected)
-                                return;
+                            if (wearingAquaAffinity)
+                                if(infected)
+                                    break;
+                                else
+                                    return;
                         }
 
                     // Water is more deadly to infected players
