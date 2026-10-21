@@ -13,6 +13,12 @@ commands:
     permission: apocalypseevent
     permission-message: You do not have permission to use that command!
     usage: "Incorrect usage! Example: /<command> parameter"
+  alert:
+    description: A command that allows players to send an alert to admins and moderators.
+    aliases: al
+    permission: apocalypseevent.alert
+    permission-message: You do not have permission to use that command!
+    usage: "Incorrect usage! Example: /<command> message"
 
 permissions:
   apocalypseevent:
@@ -35,3 +41,6 @@ permissions:
         description: Allows a player to make a player immune with /apocalypseevent immunize
       apocalypseevent.deimmunize:
         description: Allows a player to make a player no longer immune with /apocalypseevent deimmunize
+      apocalypseevent.alert:
+        default: true
+        description: Allows a player to send an alert message to admins and moderators with /alert <message>

@@ -27,7 +27,7 @@ public class ApocalypseEventCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, String @NonNull [] args){
-        // Checks if they supplied any arguments
+        // Checks the amount of arguments supplied
         if(args.length < 1 || args.length > 3)
             return false;
 

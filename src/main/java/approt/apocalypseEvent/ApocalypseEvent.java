@@ -1,5 +1,7 @@
 package approt.apocalypseEvent;
 
+import approt.apocalypseEvent.commands.AlertCommand;
+import approt.apocalypseEvent.commands.AlertTabCompleter;
 import approt.apocalypseEvent.commands.ApocalypseEventCommand;
 import approt.apocalypseEvent.commands.ApocalypseEventTabCompleter;
 import approt.apocalypseEvent.listeners.*;
@@ -85,9 +87,11 @@ public final class ApocalypseEvent extends JavaPlugin {
 
         // Register the commands
         Objects.requireNonNull(getCommand("apocalypseevent")).setExecutor(new ApocalypseEventCommand(this, infectionFunctions));
+        Objects.requireNonNull(getCommand("alert")).setExecutor(new AlertCommand(this));
 
         // Register the tab completers
         Objects.requireNonNull(getCommand("apocalypseevent")).setTabCompleter(new ApocalypseEventTabCompleter());
+        Objects.requireNonNull(getCommand("alert")).setTabCompleter(new AlertTabCompleter());
 
         // Register listeners
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(this), this);
