@@ -54,6 +54,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean waterCanTreat;
     public Boolean deadlyWater;
     public Boolean speedyCakes;
+    public Boolean remedyImmunizes;
     public Biome treatBiome;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
@@ -146,6 +147,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         waterCanTreat = getConfig().getBoolean("water-can-treat", true);
         deadlyWater = getConfig().getBoolean("deadly-water", true);
         speedyCakes = getConfig().getBoolean("speedy-cakes", true);
+        remedyImmunizes = getConfig().getBoolean("remedy-immunizes", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();

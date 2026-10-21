@@ -32,3 +32,9 @@ permissions:
       apocalypseevent.whisper:
         default: true
         description: Allows players to use ApocalypseEvent's proximity based whisper command.
+      apocalypseevent.remedy:
+        description: Allows a player to get the remedy item with /apocalypseevent remedy
+      apocalypseevent.immunize:
+        description: Allows a player to make a player immune with /apocalypseevent immunize
+      apocalypseevent.deimmunize:
+        description: Allows a player to make a player no longer immune with /apocalypseevent deimmunize

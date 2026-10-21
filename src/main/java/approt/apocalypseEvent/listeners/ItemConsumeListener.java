@@ -36,10 +36,21 @@ public class ItemConsumeListener implements Listener {
         Material material = event.getItem().getType();
 
         // Checks if they are infected
-        if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true)) {
+        boolean infected = Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true);
+        if(infected) {
             // Checks if it was an item that might clear the infected effects
             if (material == Material.MILK_BUCKET || material == Material.POTION)
                 Bukkit.getScheduler().runTaskLater(plugin, () -> infectionFunctions.ApplyInfectedEffects(player), 1L); // Runs the task after the item consume event so the effects apply after the item clears effects
+        }
+
+        // Checks if the item is a remedy item
+        if(Objects.equals(Objects.requireNonNull(event.getItem().getItemMeta()).getPersistentDataContainer().get(new NamespacedKey(plugin, "remedy-item"), PersistentDataType.BOOLEAN), true))
+        {
+            // Checks if they are infected
+            if(infected)
+                infectionFunctions.CureInfected(player);
+            else if(plugin.remedyImmunizes) // If immunization enabled, immunize non-infected players
+                infectionFunctions.Immunize(player);
         }
     }
 }

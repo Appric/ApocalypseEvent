@@ -39,6 +39,7 @@ infection: true # Sets whether to use the infection mechanics
 infect-time: 300 # The time in seconds before a player is converted from infection
 fire-only-death-infected: true # Sets whether fire-related damage is the only way for an infected player to die
 less-infected-health: 2 # Sets how much maximum health infected players lose (in half-hearts so 2 is a full heart). Use 0 to disable.
+remedy-immunizes: true # Sets whether the remedy item will make not infected players immune to the infection
 
 custom-recipes: true # Sets whether to use the custom recipes
 juice-duration: 60 # Sets the amount of seconds the juice effects last

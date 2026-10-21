@@ -34,6 +34,12 @@ public class PlayerJoinListener implements Listener {
             player.getPersistentDataContainer().set(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN, false);
         }
 
+        // Checks if the player has received the immune persistent data container key
+        if(!player.getPersistentDataContainer().has(new NamespacedKey(plugin, "immune"), PersistentDataType.BOOLEAN))
+        {
+            player.getPersistentDataContainer().set(new NamespacedKey(plugin, "immune"), PersistentDataType.BOOLEAN, false);
+        }
+
         // Check if the plugin is enabled
         if (!plugin.enabled)
             return;

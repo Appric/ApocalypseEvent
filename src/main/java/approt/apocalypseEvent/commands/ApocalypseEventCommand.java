@@ -3,6 +3,7 @@ package approt.apocalypseEvent.commands;
 import approt.apocalypseEvent.ApocalypseEvent;
 import approt.apocalypseEvent.InfectionFunctions;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -10,6 +11,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.NonNull;
 
@@ -25,7 +28,7 @@ public class ApocalypseEventCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, String @NonNull [] args){
         // Checks if they supplied any arguments
-        if(args.length < 1 || args.length > 2)
+        if(args.length < 1 || args.length > 3)
             return false;
 
         // Checks for the reload command and proper permissions
@@ -111,6 +114,13 @@ public class ApocalypseEventCommand implements CommandExecutor {
                 return true;
             }
 
+            // Checks if the player is immune
+            if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "immune"), PersistentDataType.BOOLEAN), true))
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player is immune!§r");
+                return true;
+            }
+
             // Call the infection function
             infectionFunctions.StartInfection(player);
         }
@@ -151,6 +161,13 @@ public class ApocalypseEventCommand implements CommandExecutor {
                 return true;
             }
 
+            // Checks if the player is immune
+            if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "immune"), PersistentDataType.BOOLEAN), true))
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player is immune!§r");
+                return true;
+            }
+
             // Checks if the player is already infected
             if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true))
             {
@@ -160,6 +177,102 @@ public class ApocalypseEventCommand implements CommandExecutor {
 
             // Call convert function
             infectionFunctions.ConvertToInfected(player);
+        }
+        // Checks for the remedy command and proper permissions
+        else if(args[0].equals("remedy") && sender.hasPermission("apocalypseevent.remedy"))
+        {
+            // Check for another argument
+            if(args.length < 2) {
+                sender.sendMessage("§6[ApocalypseEvent] §cYou must supply a player!§r");
+                return true;
+            }
+
+            // Check if the player exists and is online
+            Player player = Bukkit.getPlayerExact(args[1]);
+            if(player == null)
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player does not exist or is not online!§r");
+                return true;
+            }
+
+            // Check if an amount was specified, and if so is valid
+            int amount = 1;
+            if(args.length == 3)
+            {
+                try{
+                    amount = Integer.parseInt(args[2]);
+                } catch (NumberFormatException _) {
+                }
+            }
+
+            // Define the remedy item
+            ItemStack remedy = new ItemStack(Material.HONEY_BOTTLE);
+            ItemMeta meta = remedy.getItemMeta();
+            if(meta != null)
+            {
+                meta.setDisplayName("§6§lThe Cure§r");
+                meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "remedy-item"), PersistentDataType.BOOLEAN, true);
+                meta.setEnchantmentGlintOverride(true);
+                remedy.setItemMeta(meta);
+            }
+            remedy.setAmount(amount);
+
+            // Give the player the item
+            player.getInventory().addItem(remedy);
+        }
+        // Checks for the immunize command and proper permissions
+        else if(args[0].equals("immunize") && sender.hasPermission("apocalypseevent.immunize"))
+        {
+            // Check for another argument
+            if(args.length < 2) {
+                sender.sendMessage("§6[ApocalypseEvent] §cYou must supply a player!§r");
+                return true;
+            }
+
+            // Check if the player exists and is online
+            Player player = Bukkit.getPlayerExact(args[1]);
+            if(player == null)
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player does not exist or is not online!§r");
+                return true;
+            }
+
+            // Checks if the player is immune
+            if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "immune"), PersistentDataType.BOOLEAN), true))
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player is already immune!§r");
+                return true;
+            }
+
+            // Call immunize function
+            infectionFunctions.Immunize(player);
+        }
+        // Checks for the deimmunize command and proper permissions
+        else if(args[0].equals("deimmunize") && sender.hasPermission("apocalypseevent.deimmunize"))
+        {
+            // Check for another argument
+            if(args.length < 2) {
+                sender.sendMessage("§6[ApocalypseEvent] §cYou must supply a player!§r");
+                return true;
+            }
+
+            // Check if the player exists and is online
+            Player player = Bukkit.getPlayerExact(args[1]);
+            if(player == null)
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player does not exist or is not online!§r");
+                return true;
+            }
+
+            // Checks if the player is not immune
+            if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "immune"), PersistentDataType.BOOLEAN), false))
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player is not immune!§r");
+                return true;
+            }
+
+            // Call deimmunize function
+            infectionFunctions.Deimmunize(player);
         }
 
         return true;

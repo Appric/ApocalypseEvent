@@ -31,6 +31,10 @@ public class InfectionFunctions {
 
     public void StartInfection(Player player)
     {
+        // Checks if the player is immune
+        if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "immune"), PersistentDataType.BOOLEAN), true))
+                return;
+
         // Get scoreboard details
         Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
         Objective objective = scoreboard.getObjective("infectCount");
@@ -59,6 +63,10 @@ public class InfectionFunctions {
 
     public void ConvertToInfected(Player player)
     {
+        // Checks if the player is immune
+        if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "immune"), PersistentDataType.BOOLEAN), true))
+            return;
+
         Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
         Team team = scoreboard.getTeam("Infected");
 
@@ -174,5 +182,44 @@ public class InfectionFunctions {
             level--;
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, PotionEffect.INFINITE_DURATION, level, true));
+    }
+
+    public void Immunize(Player player)
+    {
+        // Sets the immune data
+        player.getPersistentDataContainer().set(new NamespacedKey(plugin, "immune"), PersistentDataType.BOOLEAN, true);
+
+        // Calls the cure function in case they have infected time (and allows ops to instantly immunize someone from an infected state)
+        CureInfected(player);
+
+        // Checks if the immune team exists
+        Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
+        Team team = scoreboard.getTeam("Immune");
+        if (team == null) {
+            team = scoreboard.registerNewTeam("Immune");
+            team.setColor(ChatColor.GRAY);
+            team.setPrefix("§6[Immune] ");
+        }
+
+        // Adds the player to the immune team
+        team.addEntry(player.getName());
+    }
+
+    public void Deimmunize(Player player)
+    {
+        // Sets the immune data
+        player.getPersistentDataContainer().set(new NamespacedKey(plugin, "immune"), PersistentDataType.BOOLEAN, false);
+
+        // Checks if the survivor team exists
+        Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
+        Team team = scoreboard.getTeam("Survivor");
+        if (team == null) {
+            team = scoreboard.registerNewTeam("Survivor");
+            team.setColor(ChatColor.GRAY);
+            team.setPrefix("§e[Survivor] ");
+        }
+
+        // Adds the player to the survivor team
+        team.addEntry(player.getName());
     }
 }
