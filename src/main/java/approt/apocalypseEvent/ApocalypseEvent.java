@@ -155,7 +155,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         deadlyWater = getConfig().getBoolean("deadly-water", true);
         speedyCakes = getConfig().getBoolean("speedy-cakes", true);
         remedyImmunizes = getConfig().getBoolean("remedy-immunizes", true);
-        fireFlowers = getConfig().getBoolean("fire-flowers", true);
+        fireFlowers = getConfig().getBoolean("fire-flowers", false);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
