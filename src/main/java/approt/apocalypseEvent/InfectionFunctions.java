@@ -177,11 +177,16 @@ public class InfectionFunctions {
 
         // Prevent the slowness from becoming unwalkable
         level = Math.min(level, 5);
+
         // Checks if the player has raid omen and slightly reduces the slowness if they do
         if(player.hasPotionEffect(PotionEffectType.RAID_OMEN))
             level--;
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, PotionEffect.INFINITE_DURATION, level, true));
+        // Makes sure the level is 0 or greater
+        if(level >= 0)
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, PotionEffect.INFINITE_DURATION, level, true));
+        else
+            player.removePotionEffect(PotionEffectType.SLOWNESS);
     }
 
     public void Immunize(Player player)

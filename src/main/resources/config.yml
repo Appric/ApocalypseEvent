@@ -46,6 +46,7 @@ inflict-duration: 10 # The amount of time in seconds the player will receive the
 
 custom-recipes: true # Sets whether to use the custom recipes
 juice-duration: 60 # Sets the amount of seconds the juice effects last
+infect-arrow-duration: 15 # Sets the amount of seconds the infected arrow lasts
 speedy-cakes: true # Sets whether cakes grant a speed boost on consumption
 
 lightning-storms: true # Sets whether rain/snow/thunder weather is switched to a more intense lightning storm

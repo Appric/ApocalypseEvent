@@ -41,6 +41,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public int lessInfectedHealth;
     public int fireFlowerUses;
     public int inflictDuration;
+    public int infectArrowDuration;
     public Boolean enabled;
     public Boolean limitWater;
     public Boolean heatEnabled;
@@ -140,6 +141,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         lessInfectedHealth = getConfig().getInt("less-infected-health", 2);
         fireFlowerUses = getConfig().getInt("fire-flower-uses", 3);
         inflictDuration = getConfig().getInt("inflict-duration", 10);
+        infectArrowDuration = getConfig().getInt("infect-arrow-duration", 15);
 
         // Set public Booleans
         enabled = getConfig().getBoolean("enabled", true);
@@ -539,9 +541,26 @@ public final class ApocalypseEvent extends JavaPlugin {
         sweetJuiceRecipe.setIngredient('X', Material.SWEET_BERRIES);
         sweetJuiceRecipe.setIngredient('Y', new RecipeChoice.ExactChoice(waterBottle));
 
+        // Define the Infected Arrow item
+        ItemStack infectedArrow = new ItemStack(Material.TIPPED_ARROW);
+        meta = (PotionMeta)infectedArrow.getItemMeta();
+        if(meta != null) {
+            meta.setDisplayName("§8Infected Arrow");
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.WITHER, infectArrowDuration * 20 * 8, 0, false),false);
+            infectedArrow.setItemMeta(meta);
+        }
+        infectedArrow.setAmount(4);
+
+        // Infected Arrow recipe
+        ShapedRecipe infectedArrowRecipe = new ShapedRecipe(new NamespacedKey(this, "infected_arrow"), infectedArrow);
+        infectedArrowRecipe.shape(" X ", "XYX", " X ");
+        infectedArrowRecipe.setIngredient('X', Material.CHARCOAL);
+        infectedArrowRecipe.setIngredient('Y', Material.ARROW);
+
         // Register the recipes
         Bukkit.addRecipe(coolJuiceRecipe);
         Bukkit.addRecipe(sweetJuiceRecipe);
+        Bukkit.addRecipe(infectedArrowRecipe);
     }
 
     // Function to remove the custom recipes
@@ -549,6 +568,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     {
         Bukkit.removeRecipe(new NamespacedKey(this, "cool_juice"));
         Bukkit.removeRecipe(new NamespacedKey(this, "sweet_juice"));
+        Bukkit.removeRecipe(new NamespacedKey(this, "infected_arrow"));
     }
 
     @Override
