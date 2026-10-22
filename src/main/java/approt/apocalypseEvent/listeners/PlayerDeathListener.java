@@ -1,15 +1,20 @@
 package approt.apocalypseEvent.listeners;
 
 import approt.apocalypseEvent.ApocalypseEvent;
+import approt.apocalypseEvent.InfectionFunctions;
 import org.bukkit.*;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Husk;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.util.Collection;
@@ -17,11 +22,13 @@ import java.util.Objects;
 
 public class PlayerDeathListener implements Listener {
 
-    // Connect to the main class
+    // Connect to the main and InfectedFunctions class
     private final ApocalypseEvent plugin;
+    private final InfectionFunctions infectionFunctions;
 
-    public PlayerDeathListener(ApocalypseEvent plugin) {
+    public PlayerDeathListener(ApocalypseEvent plugin, InfectionFunctions infectionFunctions) {
         this.plugin = plugin;
+        this.infectionFunctions = infectionFunctions;
     }
 
     @EventHandler
@@ -38,11 +45,13 @@ public class PlayerDeathListener implements Listener {
         Player player = event.getEntity();
         Player killer = player.getKiller();
 
+        // Set the damage type
+        DamageType damage = event.getDamageSource().getDamageType();
+
         // Check if they should lose their armor
         if(plugin.dropArmorToFire)
         {
             // Check if it was a fire death
-            DamageType damage = event.getDamageSource().getDamageType();
             if(plugin.fireDamageTypes.contains(damage) || player.getFireTicks() > 0)
             {
                 // Get the armor and add it to drops
@@ -97,6 +106,20 @@ public class PlayerDeathListener implements Listener {
                     if(teamPlayer != null && !nearbyEntities.contains(teamPlayer))
                         teamPlayer.sendMessage("§6--§r" + message);
                 }
+            }
+        }
+
+        // Checks if the player is not infected should become infected
+        if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), false) && (damage == DamageType.WITHER || event.getDamageSource().getCausingEntity() instanceof Husk || (killer != null && Objects.equals(killer.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true))))
+        {
+            // Get scoreboard details
+            Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
+            Objective objective = scoreboard.getObjective("infectCount");
+
+            // Starts the infection and adds their new respawn location if they don't already have infection time
+            if(objective != null && !objective.getScore(player.getName()).isScoreSet()) {
+                infectionFunctions.StartInfection(player);
+                plugin.newRepsawn.put(player.getUniqueId(), player.getLocation());
             }
         }
     }

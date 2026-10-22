@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class PlayerRespawnListener implements Listener {
 
@@ -39,5 +40,14 @@ public class PlayerRespawnListener implements Listener {
             if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true))
                 infectionFunctions.ApplyInfectedEffects(player);
         }, 1L);
+
+        // Checks if a player has a new respawn point
+        UUID uuid = player.getUniqueId();
+        if(plugin.newRepsawn.containsKey(uuid))
+        {
+            // Sets the new respawn and removes it from the hash map
+            event.setRespawnLocation(plugin.newRepsawn.get(uuid));
+            plugin.newRepsawn.remove(uuid);
+        }
     }
 }

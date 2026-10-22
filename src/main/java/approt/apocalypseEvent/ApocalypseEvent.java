@@ -71,6 +71,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public HashMap<UUID, BukkitTask> applyHeatTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> infectTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> waterEffectTasks = new HashMap<>();
+    public HashMap<UUID, Location> newRepsawn = new HashMap<>();
 
     // List of fire related damage types
     public List<DamageType> fireDamageTypes = new ArrayList<>(List.of(DamageType.IN_FIRE, DamageType.ON_FIRE, DamageType.CAMPFIRE, DamageType.LAVA, DamageType.FIREBALL, DamageType.UNATTRIBUTED_FIREBALL, DamageType.DRY_OUT, DamageType.HOT_FLOOR, DamageType.SULFUR_CUBE_HOT));
@@ -106,7 +107,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerRespawnListener(this, infectionFunctions), this);
         getServer().getPluginManager().registerEvents(new PlayerLeaveListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(this, infectionFunctions), this);
         getServer().getPluginManager().registerEvents(new PlayerChatListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityDieListener(this), this);
         getServer().getPluginManager().registerEvents(new ItemConsumeListener(this, infectionFunctions), this);
