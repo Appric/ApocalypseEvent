@@ -49,6 +49,9 @@ lightning-storms: true # Sets whether rain/snow/thunder weather is switched to a
 random-lightning: false # Sets whether to strike players at random (if false then it will strike all players exposed to the sky)
 lightning-frequency: 5 # How often in seconds lightning will strike
 
+fire-flowers: true # Sets whether torch flowers can be used to shoot small fireballs
+fire-flower-uses: 3 # Sets the default amount of uses each flower gets before getting destroyed
+
 admin-teams:
   - "Admin"
   - "Mod"
