@@ -40,6 +40,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public int lightningFrequency;
     public int lessInfectedHealth;
     public int fireFlowerUses;
+    public int inflictDuration;
     public Boolean enabled;
     public Boolean limitWater;
     public Boolean heatEnabled;
@@ -59,6 +60,8 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean speedyCakes;
     public Boolean remedyImmunizes;
     public Boolean fireFlowers;
+    public Boolean infectedInflictEffect;
+    public Boolean inflictHandsOnly;
     public Biome treatBiome;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
@@ -135,6 +138,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         lightningFrequency = getConfig().getInt("lightning-frequency", 5);
         lessInfectedHealth = getConfig().getInt("less-infected-health", 2);
         fireFlowerUses = getConfig().getInt("fire-flower-uses", 3);
+        inflictDuration = getConfig().getInt("inflict-duration", 10);
 
         // Set public Booleans
         enabled = getConfig().getBoolean("enabled", true);
@@ -156,6 +160,8 @@ public final class ApocalypseEvent extends JavaPlugin {
         speedyCakes = getConfig().getBoolean("speedy-cakes", true);
         remedyImmunizes = getConfig().getBoolean("remedy-immunizes", true);
         fireFlowers = getConfig().getBoolean("fire-flowers", false);
+        infectedInflictEffect = getConfig().getBoolean("infected-inflict-effect", true);
+        inflictHandsOnly = getConfig().getBoolean("inflict-hands-only", false);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
