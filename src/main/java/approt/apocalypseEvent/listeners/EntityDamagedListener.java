@@ -115,7 +115,7 @@ public class EntityDamagedListener implements Listener {
                             meta.setEnchantmentGlintOverride(false);
                             item.setItemMeta(meta);
 
-                            // Strike lightning at the causing entity
+                            // Strike lightning at the targeted entity
                             Bukkit.getScheduler().runTaskLater(plugin, () -> entity.getWorld().strikeLightning(entity.getLocation()), 1L);
 
                             // Break the loop to preserve other item pieces charged status
@@ -123,6 +123,17 @@ public class EntityDamagedListener implements Listener {
                         }
                     }
                 }
+            }
+
+            // Check for an attack with the surge spear
+            ItemStack hand = attacker.getInventory().getItemInMainHand();
+            if(hand.getItemMeta() != null && Objects.equals(hand.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "surge-spear"), PersistentDataType.BOOLEAN), true))
+            {
+                // Strike lightning at the targeted entity if charging
+                Bukkit.getScheduler().runTaskLater(plugin, () -> entity.getWorld().strikeLightning(entity.getLocation()), 1L);
+
+                // Use some hunger
+                attacker.setFoodLevel(Math.max(attacker.getFoodLevel() - 2, 0));
             }
 
             // Check if the attacker is infected and should inflict wither

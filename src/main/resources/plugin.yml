@@ -44,3 +44,5 @@ permissions:
       apocalypseevent.alert:
         default: true
         description: Allows a player to send an alert message to admins and moderators with /alert <message>
+      apocalypseevent.spear:
+        description: Allows a player to get the surge spear item with /apocalypseevent spear

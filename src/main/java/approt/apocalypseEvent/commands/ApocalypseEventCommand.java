@@ -10,6 +10,7 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -273,6 +274,48 @@ public class ApocalypseEventCommand implements CommandExecutor {
 
             // Call deimmunize function
             infectionFunctions.Deimmunize(player);
+        }
+        // Checks for the remedy command and proper permissions
+        else if(args[0].equals("spear") && sender.hasPermission("apocalypseevent.spear"))
+        {
+            // Check for another argument
+            if(args.length < 2) {
+                sender.sendMessage("§6[ApocalypseEvent] §cYou must supply a player!§r");
+                return true;
+            }
+
+            // Check if the player exists and is online
+            Player player = Bukkit.getPlayerExact(args[1]);
+            if(player == null)
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player does not exist or is not online!§r");
+                return true;
+            }
+
+            // Check if an amount was specified, and if so is valid
+            int amount = 1;
+            if(args.length == 3)
+            {
+                try{
+                    amount = Integer.parseInt(args[2]);
+                } catch (NumberFormatException _) {
+                }
+            }
+
+            // Define the remedy item
+            ItemStack surgeSpear = new ItemStack(Material.COPPER_SPEAR);
+            ItemMeta meta = surgeSpear.getItemMeta();
+            if(meta != null)
+            {
+                meta.setDisplayName("§x§0§0§F§F§F§5§lT§x§2§4§F§F§D§2§lh§x§4§8§F§F§A§F§le §x§9§0§F§F§6§9§lS§x§B§4§F§F§4§6§lu§x§D§8§F§F§2§3§lr§x§F§C§F§F§0§0§lg§le§r");
+                meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "surge-spear"), PersistentDataType.BOOLEAN, true);
+                meta.addEnchant(Enchantment.CHANNELING, 1, false);
+                surgeSpear.setItemMeta(meta);
+            }
+            surgeSpear.setAmount(amount);
+
+            // Give the player the item
+            player.getInventory().addItem(surgeSpear);
         }
 
         return true;
