@@ -43,11 +43,18 @@ public class PlayerRespawnListener implements Listener {
 
         // Checks if a player has a new respawn point
         UUID uuid = player.getUniqueId();
-        if(plugin.newRepsawn.containsKey(uuid))
+        if(plugin.newRespawn.containsKey(uuid))
         {
             // Sets the new respawn and removes it from the hash map
-            event.setRespawnLocation(plugin.newRepsawn.get(uuid));
-            plugin.newRepsawn.remove(uuid);
+            event.setRespawnLocation(plugin.newRespawn.get(uuid));
+            plugin.newRespawn.remove(uuid);
+        }
+
+        // Checks if a player's hunger needs to be set
+        if(plugin.keepHunger)
+        {
+            if(plugin.lastHunger.containsKey(player.getUniqueId()))
+                Bukkit.getScheduler().runTaskLater(plugin, () -> player.setFoodLevel(plugin.lastHunger.get(player.getUniqueId())), 1L);
         }
     }
 }

@@ -49,6 +49,12 @@ public class PlayerDeathListener implements Listener {
         // Set the damage type
         DamageType damage = event.getDamageSource().getDamageType();
 
+        // Save hunger if it should be saved
+        if(plugin.keepHunger)
+        {
+            plugin.lastHunger.put(player.getUniqueId(), Math.max(player.getFoodLevel(), 8));
+        }
+
         // Check if they should lose their armor
         if(plugin.dropArmorToFire)
         {
@@ -135,7 +141,7 @@ public class PlayerDeathListener implements Listener {
             // Starts the infection and adds their new respawn location if they don't already have infection time
             if(objective != null && !objective.getScore(player.getName()).isScoreSet()) {
                 infectionFunctions.StartInfection(player);
-                plugin.newRepsawn.put(player.getUniqueId(), player.getLocation());
+                plugin.newRespawn.put(player.getUniqueId(), player.getLocation());
             }
         }
     }

@@ -64,6 +64,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean infectedInflictEffect;
     public Boolean inflictHandsOnly;
     public Boolean dropFood;
+    public Boolean keepHunger;
     public Biome treatBiome;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
@@ -74,7 +75,8 @@ public final class ApocalypseEvent extends JavaPlugin {
     public HashMap<UUID, BukkitTask> applyHeatTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> infectTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> waterEffectTasks = new HashMap<>();
-    public HashMap<UUID, Location> newRepsawn = new HashMap<>();
+    public HashMap<UUID, Location> newRespawn = new HashMap<>();
+    public HashMap<UUID, Integer> lastHunger = new HashMap<>();
 
     // List of fire related damage types
     public List<DamageType> fireDamageTypes = new ArrayList<>(List.of(DamageType.IN_FIRE, DamageType.ON_FIRE, DamageType.CAMPFIRE, DamageType.LAVA, DamageType.FIREBALL, DamageType.UNATTRIBUTED_FIREBALL, DamageType.DRY_OUT, DamageType.HOT_FLOOR, DamageType.SULFUR_CUBE_HOT));
@@ -168,6 +170,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         infectedInflictEffect = getConfig().getBoolean("infected-inflict-effect", true);
         inflictHandsOnly = getConfig().getBoolean("inflict-hands-only", false);
         dropFood = getConfig().getBoolean("drop-food", true);
+        keepHunger = getConfig().getBoolean("keep-hunger", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
