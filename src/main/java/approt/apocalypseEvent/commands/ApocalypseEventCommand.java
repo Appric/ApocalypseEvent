@@ -275,7 +275,7 @@ public class ApocalypseEventCommand implements CommandExecutor {
             // Call deimmunize function
             infectionFunctions.Deimmunize(player);
         }
-        // Checks for the remedy command and proper permissions
+        // Checks for the spear command and proper permissions
         else if(args[0].equals("spear") && sender.hasPermission("apocalypseevent.spear"))
         {
             // Check for another argument
@@ -316,6 +316,48 @@ public class ApocalypseEventCommand implements CommandExecutor {
 
             // Give the player the item
             player.getInventory().addItem(surgeSpear);
+        }
+        // Checks for the axe command and proper permissions
+        else if(args[0].equals("axe") && sender.hasPermission("apocalypseevent.axe"))
+        {
+            // Check for another argument
+            if(args.length < 2) {
+                sender.sendMessage("§6[ApocalypseEvent] §cYou must supply a player!§r");
+                return true;
+            }
+
+            // Check if the player exists and is online
+            Player player = Bukkit.getPlayerExact(args[1]);
+            if(player == null)
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player does not exist or is not online!§r");
+                return true;
+            }
+
+            // Check if an amount was specified, and if so is valid
+            int amount = 1;
+            if(args.length == 3)
+            {
+                try{
+                    amount = Integer.parseInt(args[2]);
+                } catch (NumberFormatException _) {
+                }
+            }
+
+            // Define the remedy item
+            ItemStack icedEdge = new ItemStack(Material.STONE_AXE);
+            ItemMeta meta = icedEdge.getItemMeta();
+            if(meta != null)
+            {
+                meta.setDisplayName("§x§0§4§A§E§F§F§lG§x§2§8§B§D§F§F§lr§x§4§C§C§C§F§F§la§x§7§0§D§B§F§F§lu§x§9§4§E§A§F§F§lp§x§B§8§F§9§F§F§le§ll§r");
+                meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "graupel"), PersistentDataType.BOOLEAN, true);
+                meta.addEnchant(Enchantment.FROST_WALKER, 1, false);
+                icedEdge.setItemMeta(meta);
+            }
+            icedEdge.setAmount(amount);
+
+            // Give the player the item
+            player.getInventory().addItem(icedEdge);
         }
 
         return true;

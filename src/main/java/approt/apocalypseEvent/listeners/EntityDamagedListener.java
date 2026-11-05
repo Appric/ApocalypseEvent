@@ -129,8 +129,18 @@ public class EntityDamagedListener implements Listener {
             ItemStack hand = attacker.getInventory().getItemInMainHand();
             if(hand.getItemMeta() != null && Objects.equals(hand.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "surge-spear"), PersistentDataType.BOOLEAN), true))
             {
-                // Strike lightning at the targeted entity if charging
+                // Strike lightning at the targeted entity
                 Bukkit.getScheduler().runTaskLater(plugin, () -> entity.getWorld().strikeLightning(entity.getLocation()), 1L);
+
+                // Use some hunger
+                attacker.setFoodLevel(Math.max(attacker.getFoodLevel() - 2, 0));
+            }
+
+            // Check for an attack with the graupel/iced edge
+            if(hand.getItemMeta() != null && Objects.equals(hand.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "graupel"), PersistentDataType.BOOLEAN), true))
+            {
+                // Apply frozen ticks
+                Bukkit.getScheduler().runTaskLater(plugin, () -> entity.setFreezeTicks(280), 1L);
 
                 // Use some hunger
                 attacker.setFoodLevel(Math.max(attacker.getFoodLevel() - 2, 0));

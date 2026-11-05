@@ -79,7 +79,7 @@ public class PlayerDeathListener implements Listener {
             if(item != null) {
                 ItemMeta meta = item.getItemMeta();
                 if(meta != null) {
-                    if (plugin.dropItems.contains(item.getType()) || (plugin.dropFood && item.getType().isEdible()) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "surge-spear"), PersistentDataType.BOOLEAN), true) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "remedy-item"), PersistentDataType.BOOLEAN), true)) {
+                    if (plugin.dropItems.contains(item.getType()) || (plugin.dropFood && item.getType().isEdible()) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "surge-spear"), PersistentDataType.BOOLEAN), true) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "remedy-item"), PersistentDataType.BOOLEAN), true) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "graupel"), PersistentDataType.BOOLEAN), true)) {
                         event.getDrops().add(item);
                         player.getInventory().setItem(slot, null);
                     }

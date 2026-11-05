@@ -46,3 +46,5 @@ permissions:
         description: Allows a player to send an alert message to admins and moderators with /alert <message>
       apocalypseevent.spear:
         description: Allows a player to get the surge spear item with /apocalypseevent spear
+      apocalypseevent.axe:
+        description: Allows a player to get the graupel item with /apocalypseevent axe
