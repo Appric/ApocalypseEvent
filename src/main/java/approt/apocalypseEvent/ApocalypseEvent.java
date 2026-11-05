@@ -557,10 +557,19 @@ public final class ApocalypseEvent extends JavaPlugin {
         infectedArrowRecipe.setIngredient('X', Material.CHARCOAL);
         infectedArrowRecipe.setIngredient('Y', Material.ARROW);
 
+        // Cake recipe
+        ShapedRecipe blueberryPieRecipe = new ShapedRecipe(new NamespacedKey(this, "blueberry_pie"), new ItemStack(Material.CAKE));
+        blueberryPieRecipe.shape("XXX", "YZY", "AAA");
+        blueberryPieRecipe.setIngredient('X', Material.SWEET_BERRIES);
+        blueberryPieRecipe.setIngredient('Y', Material.SUGAR);
+        blueberryPieRecipe.setIngredient('Z', new RecipeChoice.MaterialChoice(Tag.ITEMS_EGGS));
+        blueberryPieRecipe.setIngredient('A', Material.WHEAT);
+
         // Register the recipes
         Bukkit.addRecipe(coolJuiceRecipe);
         Bukkit.addRecipe(sweetJuiceRecipe);
         Bukkit.addRecipe(infectedArrowRecipe);
+        Bukkit.addRecipe(blueberryPieRecipe);
     }
 
     // Function to remove the custom recipes
@@ -569,6 +578,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         Bukkit.removeRecipe(new NamespacedKey(this, "cool_juice"));
         Bukkit.removeRecipe(new NamespacedKey(this, "sweet_juice"));
         Bukkit.removeRecipe(new NamespacedKey(this, "infected_arrow"));
+        Bukkit.removeRecipe(new NamespacedKey(this, "blueberry_pie"));
     }
 
     @Override
