@@ -63,11 +63,13 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean fireFlowers;
     public Boolean infectedInflictEffect;
     public Boolean inflictHandsOnly;
+    public Boolean dropFood;
     public Biome treatBiome;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
     public List<Team> adminTeams = new ArrayList<>();
+    public List<Material> dropItems = new ArrayList<>();
     public HashMap<UUID, BukkitTask> freezeTickTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> applyHeatTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> infectTasks = new HashMap<>();
@@ -165,6 +167,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         fireFlowers = getConfig().getBoolean("fire-flowers", false);
         infectedInflictEffect = getConfig().getBoolean("infected-inflict-effect", true);
         inflictHandsOnly = getConfig().getBoolean("inflict-hands-only", false);
+        dropFood = getConfig().getBoolean("drop-food", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
@@ -199,6 +202,14 @@ public final class ApocalypseEvent extends JavaPlugin {
             Team team = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard().getTeam(name);
             if(team != null)
                 adminTeams.add(team);
+        }
+
+        // Converts material names to materials and puts them in the dropItems list
+        dropItems.clear();
+        for (String name : getConfig().getStringList("drop-items")) {
+            Material material = Material.getMaterial(name);
+            if(material != null)
+                dropItems.add(material);
         }
     }
 

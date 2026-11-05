@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -62,6 +63,21 @@ public class PlayerDeathListener implements Listener {
 
                 // Clear their armor
                 Objects.requireNonNull(player.getEquipment()).setArmorContents(null);
+            }
+        }
+
+        // Causes the player to drop certain items on death
+        for(int slot = 0; slot < player.getInventory().getSize(); slot++)
+        {
+            ItemStack item = player.getInventory().getItem(slot);
+            if(item != null) {
+                ItemMeta meta = item.getItemMeta();
+                if(meta != null) {
+                    if (plugin.dropItems.contains(item.getType()) || (plugin.dropFood && item.getType().isEdible()) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "surge-spear"), PersistentDataType.BOOLEAN), true)) {
+                        event.getDrops().add(item);
+                        player.getInventory().setItem(slot, null);
+                    }
+                }
             }
         }
 

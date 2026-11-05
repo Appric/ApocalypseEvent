@@ -29,6 +29,10 @@ unbreaking-armor-craft: true # Sets whether armor will automatically get unbreak
 limit-locator-bar: true # Sets whether the locator bar is only received by infected players
 water-can-treat: true # Sets whether water in the treat-biome biome will treat a player under infection time, but before converting
 treat-biome: "cherry_grove"
+drop-food: true # Sets whether you drop food items when you die
+
+drop-items: # List of items to drop on death
+  - BEACON
 
 limit-water: false # Sets whether you can only place water next to undried blocks or not
 deadly-water: true # Sets whether water in the map poisons/withers the player (except for the trat-biome biome if water-can-treat is enabled)
