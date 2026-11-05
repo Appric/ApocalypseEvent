@@ -274,8 +274,20 @@ public final class ApocalypseEvent extends JavaPlugin {
             public void run() {
                 // Checks if the player is online, exists, is alive, and is still in a cold biome
                 if(enabled && player.isOnline() && player.isValid() && !player.isDead() && freezingBiomes.contains(player.getLocation().getBlock().getBiome())) {
-                    // Apply freeze ticks at twice the speed of powder snow, unless overly exceeding max (accounting for the normal tick decay)
-                    player.setFreezeTicks(Math.min(player.getFreezeTicks() + 4, player.getMaxFreezeTicks() + 2));
+                    // Check for leather armor if not creative or infected
+                    boolean hasLeather = false;
+                    boolean isCreativeOrSpectator = player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR;
+                    if(!isCreativeOrSpectator && Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(ApocalypseEvent.this, "infected"), PersistentDataType.BOOLEAN), false)) {
+                        for (ItemStack item : player.getInventory().getArmorContents()) {
+                            if (item != null && Tag.FREEZE_IMMUNE_WEARABLES.isTagged(item.getType()))
+                                hasLeather = true;
+                        }
+                    }
+
+                    if(!hasLeather && !isCreativeOrSpectator) {
+                        // Apply freeze ticks at twice the speed of powder snow, unless overly exceeding max (accounting for the normal tick decay)
+                        player.setFreezeTicks(Math.min(player.getFreezeTicks() + 4, player.getMaxFreezeTicks() + 2));
+                    }
                 }
                 else // Cancels the event when it is no longer valid
                 {
