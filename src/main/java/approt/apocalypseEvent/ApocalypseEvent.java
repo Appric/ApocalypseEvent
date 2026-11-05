@@ -150,7 +150,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         limitDeathMessages = getConfig().getBoolean("limit-death-messages", true);
         limitChatMessages = getConfig().getBoolean("limit-chat-messages", true);
         dropDriedGhasts = getConfig().getBoolean("drop-dried-ghasts", true);
-        dropArmorToFire = getConfig().getBoolean("drop-armor-to-fire", true);
+        dropArmorToFire = getConfig().getBoolean("drop-armor-to-fire", false);
         infection = getConfig().getBoolean("infection", true);
         fireOnlyDeathInfected = getConfig().getBoolean("fire-only-death-infected", true);
         customRecipes = getConfig().getBoolean("custom-recipes", true);

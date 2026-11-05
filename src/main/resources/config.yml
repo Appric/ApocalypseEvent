@@ -24,7 +24,7 @@ limit-chat-messages: true # Sets whether to require players to be in a certain r
 chat-message-range: 20 # The range chat messages can be seen if enabled
 
 drop-dried-ghasts: true # Sets whether happy ghasts will drop dried ghasts when they die
-drop-armor-to-fire: true # Sets whether players will drop their armor to a fire-related death
+drop-armor-to-fire: false # Sets whether players will drop their armor to a fire-related death
 unbreaking-armor-craft: true # Sets whether armor will automatically get unbreaking I when crafted
 limit-locator-bar: true # Sets whether the locator bar is only received by infected players
 water-can-treat: true # Sets whether water in the treat-biome biome will treat a player under infection time, but before converting
