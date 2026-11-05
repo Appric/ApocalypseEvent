@@ -3,6 +3,8 @@ package approt.apocalypseEvent.commands;
 import approt.apocalypseEvent.ApocalypseEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -54,12 +56,17 @@ public class AlertCommand implements CommandExecutor {
                     Player teamPlayer = Bukkit.getPlayer(string);
                     if(teamPlayer != null)
                     {
+                        // Send the message
                         teamPlayer.sendMessage("§c[Alert] §r<" + name + "§r> " + message);
 
+                        // Send the title
                         String title = "title " + teamPlayer.getName() + " title " + "{text:\"-Alert!-\",color:dark_red}";
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), title);
                         String subtitle = "title " + teamPlayer.getName() + " subtitle {text:\"" + sender.getName() + " has sent an alert!\",color:red}";
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), subtitle);
+
+                        // Play an alert sound
+                        teamPlayer.playSound(teamPlayer, Sound.ENTITY_ELDER_GUARDIAN_CURSE, SoundCategory.AMBIENT, 1, 1);
                     }
                 }
             }
