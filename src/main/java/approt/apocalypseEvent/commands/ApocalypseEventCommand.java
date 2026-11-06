@@ -14,9 +14,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.NonNull;
 
+import java.util.List;
 import java.util.Objects;
 
 public class ApocalypseEventCommand implements CommandExecutor {
@@ -26,6 +28,7 @@ public class ApocalypseEventCommand implements CommandExecutor {
     private final InfectionFunctions infectionFunctions;
     public ApocalypseEventCommand(ApocalypseEvent plugin, InfectionFunctions infectionFunctions) {this.plugin = plugin; this.infectionFunctions = infectionFunctions;}
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, String @NonNull [] args){
         // Checks the amount of arguments supplied
@@ -352,6 +355,11 @@ public class ApocalypseEventCommand implements CommandExecutor {
                 meta.setDisplayName("§x§0§4§A§E§F§F§lG§x§2§8§B§D§F§F§lr§x§4§C§C§C§F§F§la§x§7§0§D§B§F§F§lu§x§9§4§E§A§F§F§lp§x§B§8§F§9§F§F§le§ll§r");
                 meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "graupel"), PersistentDataType.BOOLEAN, true);
                 meta.addEnchant(Enchantment.FROST_WALKER, 1, false);
+
+                CustomModelDataComponent data = meta.getCustomModelDataComponent();
+                data.setStrings(List.of("iced_edge"));
+                meta.setCustomModelDataComponent(data);
+
                 icedEdge.setItemMeta(meta);
             }
             icedEdge.setAmount(amount);
