@@ -92,7 +92,6 @@ public class PlayerDeathListener implements Listener {
         {
             // Color the message
             String message = event.getDeathMessage();
-            event.setDeathMessage(null);
             if (message == null)
                 message = "A player has died";
             if(killer != null && killer.getType() == EntityType.PLAYER)
@@ -103,31 +102,43 @@ public class PlayerDeathListener implements Listener {
             // Clear the normal death message
             event.setDeathMessage(null);
 
-            // Initialize location variables and get nearby entities
-            Location location = event.getEntity().getLocation();
-            int range = Math.max(plugin.deathMessageRange, 0);
-            Collection<Entity> nearbyEntities = Objects.requireNonNull(location.getWorld()).getNearbyEntities(location, range, range, range);
+            // Check if it should be a broadcast
+            boolean broadcast = false;
+            if(plugin.broadcastMessages)
+                for(Location location : plugin.broadcastCords)
+                    if(player.getLocation().distanceSquared(location) <= Math.pow(plugin.broadcastCenterRange, 2))
+                        broadcast = true;
 
-            // Send players within range the death message and sound
-            Player receiver;
-            for(Entity entity : nearbyEntities)
-            {
-                if(entity instanceof Player) {
-                    receiver = (Player) entity;
-                    receiver.sendMessage(message);
-                    receiver.playSound(receiver, Sound.BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundCategory.AMBIENT, 1, 1);
+            if(!broadcast) {
+                // Initialize location variables and get nearby entities
+                Location location = event.getEntity().getLocation();
+                int range = Math.max(plugin.deathMessageRange, 0);
+                Collection<Entity> nearbyEntities = Objects.requireNonNull(location.getWorld()).getNearbyEntities(location, range, range, range);
+
+                // Send players within range the death message and sound
+                Player receiver;
+                for (Entity entity : nearbyEntities) {
+                    if (entity instanceof Player) {
+                        receiver = (Player) entity;
+                        receiver.sendMessage(message);
+                        receiver.playSound(receiver, Sound.BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE, SoundCategory.AMBIENT, 1, 1);
+                    }
+                }
+
+                // Send the message to players on an admin team and not in range
+                for (Team temp : plugin.adminTeams) {
+                    for (String string : temp.getEntries()) {
+                        Player teamPlayer = Bukkit.getPlayer(string);
+                        if (teamPlayer != null && !nearbyEntities.contains(teamPlayer))
+                            teamPlayer.sendMessage("§6--§r" + message);
+                    }
                 }
             }
-
-            // Send the message to players on an admin team and not in range
-            for(Team temp : plugin.adminTeams)
+            else
             {
-                for(String string: temp.getEntries())
-                {
-                    Player teamPlayer = Bukkit.getPlayer(string);
-                    if(teamPlayer != null && !nearbyEntities.contains(teamPlayer))
-                        teamPlayer.sendMessage("§6--§r" + message);
-                }
+                // Make the broadcast
+                message = "§7[§eBroadcast§7]§r " + message;
+                Bukkit.broadcastMessage(message);
             }
         }
 

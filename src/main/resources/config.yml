@@ -22,6 +22,12 @@ limit-death-messages: true # Sets whether to require players to be in a certain 
 death-message-range: 20 # The range death messages can be seen if enabled
 limit-chat-messages: true # Sets whether to require players to be in a certain range to see chat messages
 chat-message-range: 20 # The range chat messages can be seen if enabled
+broadcast-messages: true # Sets whether to use broadcast messages
+broadcast-center-range: 20 # Sets how many blocks away from a cord a player needs to be to broadcast
+broadcast-cords: # List of coordinates to potentially broadcast from
+  - 500 126 1902
+  - -134 108 1709
+  - 531 110 2256
 
 drop-dried-ghasts: true # Sets whether happy ghasts will drop dried ghasts when they die
 drop-armor-to-fire: false # Sets whether players will drop their armor to a fire-related death

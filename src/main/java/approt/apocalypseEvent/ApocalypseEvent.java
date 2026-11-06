@@ -42,6 +42,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public int fireFlowerUses;
     public int inflictDuration;
     public int infectArrowDuration;
+    public int broadcastCenterRange;
     public Boolean enabled;
     public Boolean limitWater;
     public Boolean heatEnabled;
@@ -65,12 +66,14 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean inflictHandsOnly;
     public Boolean dropFood;
     public Boolean keepHunger;
+    public Boolean broadcastMessages;
     public Biome treatBiome;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
     public List<Biome> freezingBiomes = new ArrayList<>();
     public List<Team> adminTeams = new ArrayList<>();
     public List<Material> dropItems = new ArrayList<>();
+    public List<Location> broadcastCords = new ArrayList<>();
     public HashMap<UUID, BukkitTask> freezeTickTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> applyHeatTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> infectTasks = new HashMap<>();
@@ -146,6 +149,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         fireFlowerUses = getConfig().getInt("fire-flower-uses", 3);
         inflictDuration = getConfig().getInt("inflict-duration", 10);
         infectArrowDuration = getConfig().getInt("infect-arrow-duration", 15);
+        broadcastCenterRange = getConfig().getInt("broadcast-center-range", 20);
 
         // Set public Booleans
         enabled = getConfig().getBoolean("enabled", true);
@@ -171,6 +175,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         inflictHandsOnly = getConfig().getBoolean("inflict-hands-only", false);
         dropFood = getConfig().getBoolean("drop-food", true);
         keepHunger = getConfig().getBoolean("keep-hunger", true);
+        broadcastMessages = getConfig().getBoolean("broadcast-messages", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
@@ -213,6 +218,14 @@ public final class ApocalypseEvent extends JavaPlugin {
             Material material = Material.getMaterial(name);
             if(material != null)
                 dropItems.add(material);
+        }
+
+        // Converts cords to locations and puts them in the broadcastCords list
+        broadcastCords.clear();
+        for (String name : getConfig().getStringList("broadcast-cords")) {
+            String[] cords = name.split(" ");
+            Location location = new Location(Bukkit.getWorlds().getFirst(), Double.parseDouble(cords[0]), Double.parseDouble(cords[1]), Double.parseDouble(cords[2]));
+            broadcastCords.add(location);
         }
     }
 

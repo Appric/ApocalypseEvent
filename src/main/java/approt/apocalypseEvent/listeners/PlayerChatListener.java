@@ -42,39 +42,61 @@ public class PlayerChatListener implements Listener {
             // Cancel the event
             event.setCancelled(true);
 
-            // Make formatted name
-            String name;
-            if(team != null)
-                name = team.getColor() + team.getPrefix() + team.getColor() + player.getDisplayName() + team.getSuffix() + ChatColor.RESET;
+            // Check if it should be a broadcast
+            boolean broadcast = false;
+            if(plugin.broadcastMessages)
+                for(Location location : plugin.broadcastCords)
+                    if(player.getLocation().distanceSquared(location) <= Math.pow(plugin.broadcastCenterRange, 2))
+                        broadcast = true;
+
+            if(!broadcast) {
+                // Make formatted name
+                String name;
+                if (team != null)
+                    name = team.getColor() + team.getPrefix() + team.getColor() + player.getDisplayName() + team.getSuffix() + ChatColor.RESET;
+                else
+                    name = player.getDisplayName();
+
+                // Make the message
+                String message = String.format(event.getFormat(), name, event.getMessage());
+
+                // Run task in the main thread
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    // Find nearby entities
+                    Location location = player.getLocation();
+                    int range = Math.max(plugin.chatMessageRange, 0);
+                    Collection<Entity> nearbyEntities = Objects.requireNonNull(location.getWorld()).getNearbyEntities(location, range, range, range);
+
+                    // Send the message manually to players in range
+                    for (Entity entity : nearbyEntities)
+                        if (entity instanceof Player)
+                            entity.sendMessage(message);
+
+                    // Send the message to players on an admin team and not in range
+                    for (Team temp : plugin.adminTeams) {
+                        for (String string : temp.getEntries()) {
+                            Player teamPlayer = Bukkit.getPlayer(string);
+                            if (teamPlayer != null && !nearbyEntities.contains(teamPlayer))
+                                teamPlayer.sendMessage("§6--§r" + message);
+                        }
+                    }
+                });
+            }
             else
-                name = player.getDisplayName();
+            {
+                // Make the broadcast
+                String message = "§7[§eBroadcast§7]§r " + event.getMessage();
+                Bukkit.broadcastMessage(message);
 
-            // Make the message
-            String message = String.format(event.getFormat(), name, event.getMessage());
-
-            // Run task in the main thread
-            Bukkit.getScheduler().runTask(plugin, () ->{
-                // Find nearby entities
-                Location location = player.getLocation();
-                int range = Math.max(plugin.chatMessageRange, 0);
-                Collection<Entity> nearbyEntities = Objects.requireNonNull(location.getWorld()).getNearbyEntities(location, range, range, range);
-
-                // Send the message manually to players in range
-                for(Entity entity : nearbyEntities)
-                    if(entity instanceof Player)
-                        entity.sendMessage(message);
-
-                // Send the message to players on an admin team and not in range
-                for(Team temp : plugin.adminTeams)
-                {
-                    for(String string: temp.getEntries())
-                    {
+                // Tell admin players who sent the message
+                for (Team temp : plugin.adminTeams) {
+                    for (String string : temp.getEntries()) {
                         Player teamPlayer = Bukkit.getPlayer(string);
-                        if(teamPlayer != null && !nearbyEntities.contains(teamPlayer))
-                            teamPlayer.sendMessage("§6--§r" + message);
+                        if (teamPlayer != null)
+                            teamPlayer.sendMessage("§6--§r Broadcast sent by " + player.getDisplayName());
                     }
                 }
-            });
+            }
         }
     }
 }
