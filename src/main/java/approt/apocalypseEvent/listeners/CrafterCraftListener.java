@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.CrafterCraftEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class CrafterCraftListener implements Listener {
 
@@ -27,7 +28,7 @@ public class CrafterCraftListener implements Listener {
             Material material = event.getResult().getType();
             if(plugin.limitedItems.contains(material) || material.name().startsWith("DIAMOND_") || material.name().startsWith("NETHERITE_"))
             {
-                event.setCancelled(true);
+                event.setResult(new ItemStack(Material.AIR));
             }
         }
     }
