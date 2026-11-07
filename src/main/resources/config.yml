@@ -67,6 +67,10 @@ lightning-frequency: 5 # How often in seconds lightning will strike
 fire-flowers: false # Sets whether torch flowers can be used to shoot small fireballs
 fire-flower-uses: 3 # Sets the default amount of uses each flower gets before getting destroyed
 
+limit-items: true # Sets whether to limit certain items, such as diamond and netherite tiers
+limited-items: # List of additional items to limit
+  - MACE
+
 admin-teams:
   - "Admin"
   - "Mod"

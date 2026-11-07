@@ -67,6 +67,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean dropFood;
     public Boolean keepHunger;
     public Boolean broadcastMessages;
+    public Boolean limitItems;
     public Biome treatBiome;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
@@ -74,6 +75,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public List<Team> adminTeams = new ArrayList<>();
     public List<Material> dropItems = new ArrayList<>();
     public List<Location> broadcastCords = new ArrayList<>();
+    public List<Material> limitedItems = new ArrayList<>();
     public HashMap<UUID, BukkitTask> freezeTickTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> applyHeatTasks = new HashMap<>();
     public HashMap<UUID, BukkitTask> infectTasks = new HashMap<>();
@@ -128,6 +130,9 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CommandPreprocessListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
         getServer().getPluginManager().registerEvents(new BlockIgniteListener(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new ItemMoveListener(this), this);
+        getServer().getPluginManager().registerEvents(new CrafterCraftListener(this), this);
 
         // Call function to register the custom recipes
         registerRecipes();
@@ -176,6 +181,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         dropFood = getConfig().getBoolean("drop-food", true);
         keepHunger = getConfig().getBoolean("keep-hunger", true);
         broadcastMessages = getConfig().getBoolean("broadcast-messages", true);
+        limitItems = getConfig().getBoolean("limit-items", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();
@@ -226,6 +232,14 @@ public final class ApocalypseEvent extends JavaPlugin {
             String[] cords = name.split(" ");
             Location location = new Location(Bukkit.getWorlds().getFirst(), Double.parseDouble(cords[0]), Double.parseDouble(cords[1]), Double.parseDouble(cords[2]));
             broadcastCords.add(location);
+        }
+
+        // Converts material names to materials and puts them in the limitedItems list
+        limitedItems.clear();
+        for (String name : getConfig().getStringList("limited-items")) {
+            Material material = Material.getMaterial(name);
+            if(material != null)
+                limitedItems.add(material);
         }
     }
 

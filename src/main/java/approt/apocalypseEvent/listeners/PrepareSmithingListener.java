@@ -34,6 +34,18 @@ public class PrepareSmithingListener implements Listener {
         // Get the result and armor meta
         ItemStack result = event.getResult();
         if(result != null && result.getType() != Material.AIR) {
+            Material material = result.getType();
+
+            // Check if it is an item that should be limited
+            if(plugin.limitItems)
+            {
+                if(plugin.limitedItems.contains(material) || material.name().startsWith("DIAMOND_") || material.name().startsWith("NETHERITE_"))
+                {
+                    event.getInventory().setResult(new ItemStack(Material.AIR));
+                    return;
+                }
+            }
+
             if(result.getItemMeta() instanceof ArmorMeta meta) {
                 // Check for and apply enchants
                 if (meta.hasTrim()) {

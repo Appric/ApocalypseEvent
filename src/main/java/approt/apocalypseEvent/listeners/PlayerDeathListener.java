@@ -14,6 +14,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -154,6 +155,18 @@ public class PlayerDeathListener implements Listener {
                 infectionFunctions.StartInfection(player);
                 plugin.newRespawn.put(player.getUniqueId(), player.getLocation());
             }
+
+            objective = scoreboard.getObjective("infectedPlayers");
+
+            // Creates the objective if it does not exist
+            if(objective == null)
+            {
+                objective = scoreboard.registerNewObjective("infectedPlayers", Criteria.DUMMY, "Gold");
+            }
+
+            // Sets the player's score
+            int count = objective.getScore(player.getName()).getScore();
+            objective.getScore(player.getName()).setScore(count + 1);
         }
     }
 }

@@ -24,12 +24,17 @@ public class PrepareCraftListener implements Listener {
         if (!plugin.enabled)
             return;
 
+        ItemStack result = event.getInventory().getResult();
+        if(result == null)
+            return;
+
+        Material material = result.getType();
+
         // Check if the unbreaking craft is enabled
         if(plugin.unbreakingArmorCraft)
         {
             // Get the result and armor meta
-            ItemStack result = event.getInventory().getResult();
-            if(result != null && result.getType() != Material.AIR)
+            if(material != Material.AIR)
             {
                 // If it is armor, add unbreaking and remove enchant glint
                 if(result.getItemMeta() instanceof ArmorMeta meta) {
@@ -38,6 +43,15 @@ public class PrepareCraftListener implements Listener {
                     result.setItemMeta(meta);
                     event.getInventory().setResult(result);
                 }
+            }
+        }
+
+        // Check if it is an item that should be limited
+        if(plugin.limitItems)
+        {
+            if(plugin.limitedItems.contains(material) || material.name().startsWith("DIAMOND_") || material.name().startsWith("NETHERITE_"))
+            {
+                event.getInventory().setResult(new ItemStack(Material.AIR));
             }
         }
     }
