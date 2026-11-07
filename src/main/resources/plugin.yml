@@ -48,3 +48,5 @@ permissions:
         description: Allows a player to get the surge spear item with /apocalypseevent spear
       apocalypseevent.axe:
         description: Allows a player to get the graupel item with /apocalypseevent axe
+      apocalypseevent.shield:
+        description: Allows a player to get the phoenix shield item with /apocalypseevent shield

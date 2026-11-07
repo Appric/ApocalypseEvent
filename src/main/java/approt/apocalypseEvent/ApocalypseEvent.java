@@ -82,6 +82,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public HashMap<UUID, BukkitTask> waterEffectTasks = new HashMap<>();
     public HashMap<UUID, Location> newRespawn = new HashMap<>();
     public HashMap<UUID, Integer> lastHunger = new HashMap<>();
+    public HashMap<UUID, Location> phoenixRespawn = new HashMap<>();
 
     // List of fire related damage types
     public List<DamageType> fireDamageTypes = new ArrayList<>(List.of(DamageType.IN_FIRE, DamageType.ON_FIRE, DamageType.CAMPFIRE, DamageType.LAVA, DamageType.FIREBALL, DamageType.UNATTRIBUTED_FIREBALL, DamageType.DRY_OUT, DamageType.HOT_FLOOR, DamageType.SULFUR_CUBE_HOT));

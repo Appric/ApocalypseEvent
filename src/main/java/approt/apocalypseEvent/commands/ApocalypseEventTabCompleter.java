@@ -20,7 +20,7 @@ public class ApocalypseEventTabCompleter implements TabCompleter {
 
         if(args.length == 1)
         {
-            subcommands = Arrays.asList("reload", "toggle", "infect", "cure", "convert", "remedy", "immunize", "deimmunize", "spear", "axe");
+            subcommands = Arrays.asList("reload", "toggle", "infect", "cure", "convert", "remedy", "immunize", "deimmunize", "spear", "axe", "shield");
 
             // Only auto completes for sub commands you have permission for
             for(String string : subcommands)
@@ -36,7 +36,7 @@ public class ApocalypseEventTabCompleter implements TabCompleter {
         else if(args.length == 2)
         {
             // Check if it is for a command that has a player target
-            if(args[0].equals("infect") || args[0].equals("cure") || args[0].equals("convert") || args[0].equals("remedy") || args[0].equals("immunize") || args[0].equals("deimmunize") || args[0].equals("spear") || args[0].equals("axe"))
+            if(args[0].equals("infect") || args[0].equals("cure") || args[0].equals("convert") || args[0].equals("remedy") || args[0].equals("immunize") || args[0].equals("deimmunize") || args[0].equals("spear") || args[0].equals("axe") || args[0].equals("shield"))
             {
                 // Suggest online players
                 for(Player player : Bukkit.getOnlinePlayers())

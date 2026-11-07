@@ -73,14 +73,25 @@ public class PlayerDeathListener implements Listener {
             }
         }
 
+        // Checks if the player has the phoenix shield
+        ItemStack hand = player.getInventory().getItemInMainHand();
+        ItemStack offHand = player.getInventory().getItemInOffHand();
+        boolean phoenixSave = false;
+        if (hand.getItemMeta() != null && Objects.equals(hand.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "phoenix_shield"), PersistentDataType.BOOLEAN), true)) {
+            plugin.phoenixRespawn.put(player.getUniqueId(), player.getLocation());
+            phoenixSave = true;
+        } else if (offHand.getItemMeta() != null && Objects.equals(offHand.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "phoenix_shield"), PersistentDataType.BOOLEAN), true)) {
+            plugin.phoenixRespawn.put(player.getUniqueId(), player.getLocation());
+            phoenixSave = true;
+        }
+
         // Causes the player to drop certain items on death
-        for(int slot = 0; slot < player.getInventory().getSize(); slot++)
-        {
+        for (int slot = 0; slot < player.getInventory().getSize(); slot++) {
             ItemStack item = player.getInventory().getItem(slot);
-            if(item != null) {
+            if (item != null) {
                 ItemMeta meta = item.getItemMeta();
-                if(meta != null) {
-                    if (plugin.dropItems.contains(item.getType()) || (plugin.dropFood && item.getType().isEdible()) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "surge-spear"), PersistentDataType.BOOLEAN), true) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "remedy-item"), PersistentDataType.BOOLEAN), true) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "graupel"), PersistentDataType.BOOLEAN), true)) {
+                if (meta != null) {
+                    if (!phoenixSave && (plugin.dropItems.contains(item.getType()) || (plugin.dropFood && item.getType().isEdible()) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "surge-spear"), PersistentDataType.BOOLEAN), true) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "remedy-item"), PersistentDataType.BOOLEAN), true) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "graupel"), PersistentDataType.BOOLEAN), true)) || Objects.equals(meta.getPersistentDataContainer().get(new NamespacedKey(plugin, "phoenix_shield"), PersistentDataType.BOOLEAN), true)) {
                         event.getDrops().add(item);
                         player.getInventory().setItem(slot, null);
                     }
@@ -144,7 +155,7 @@ public class PlayerDeathListener implements Listener {
         }
 
         // Checks if the player is not infected should become infected
-        if(Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), false) && (damage == DamageType.WITHER || event.getDamageSource().getCausingEntity() instanceof Husk || (killer != null && Objects.equals(killer.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true))))
+        if(!phoenixSave && Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), false) && (damage == DamageType.WITHER || event.getDamageSource().getCausingEntity() instanceof Husk || (killer != null && Objects.equals(killer.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true))))
         {
             // Get scoreboard details
             Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();

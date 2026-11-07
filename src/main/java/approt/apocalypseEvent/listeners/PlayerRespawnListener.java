@@ -3,11 +3,13 @@ package approt.apocalypseEvent.listeners;
 import approt.apocalypseEvent.ApocalypseEvent;
 import approt.apocalypseEvent.InfectionFunctions;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Objects;
@@ -43,7 +45,25 @@ public class PlayerRespawnListener implements Listener {
 
         // Checks if a player has a new respawn point
         UUID uuid = player.getUniqueId();
-        if(plugin.newRespawn.containsKey(uuid))
+        if(plugin.phoenixRespawn.containsKey(uuid))
+        {
+            // Sets the new respawn
+            event.setRespawnLocation(plugin.phoenixRespawn.get(uuid));
+
+            // Puts the player into spectator
+            Bukkit.getScheduler().runTaskLater(plugin, () -> player.setGameMode(GameMode.SPECTATOR), 1L);
+
+            // Brings the player out of spectator at the respawn location, sets them on fire, and removes the entry from the hash map
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if(player.isOnline()) {
+                    player.teleport(plugin.phoenixRespawn.get(uuid), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    player.setGameMode(GameMode.SURVIVAL);
+                    player.setFireTicks(120);
+                    plugin.phoenixRespawn.remove(uuid);
+                }
+            }, 5 * 20L);
+        }
+        else if(plugin.newRespawn.containsKey(uuid))
         {
             // Sets the new respawn and removes it from the hash map
             event.setRespawnLocation(plugin.newRespawn.get(uuid));

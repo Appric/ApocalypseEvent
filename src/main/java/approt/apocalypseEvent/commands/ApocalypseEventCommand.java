@@ -3,16 +3,21 @@ package approt.apocalypseEvent.commands;
 import approt.apocalypseEvent.ApocalypseEvent;
 import approt.apocalypseEvent.InfectionFunctions;
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.block.Banner;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.persistence.PersistentDataType;
@@ -347,7 +352,7 @@ public class ApocalypseEventCommand implements CommandExecutor {
                 }
             }
 
-            // Define the remedy item
+            // Define the iced egde/graupel item
             ItemStack icedEdge = new ItemStack(Material.STONE_AXE);
             ItemMeta meta = icedEdge.getItemMeta();
             if(meta != null)
@@ -366,6 +371,64 @@ public class ApocalypseEventCommand implements CommandExecutor {
 
             // Give the player the item
             player.getInventory().addItem(icedEdge);
+        }
+        // Checks for the shield command and proper permissions
+        else if(args[0].equals("shield") && sender.hasPermission("apocalypseevent.shield"))
+        {
+            // Check for another argument
+            if(args.length < 2) {
+                sender.sendMessage("§6[ApocalypseEvent] §cYou must supply a player!§r");
+                return true;
+            }
+
+            // Check if the player exists and is online
+            Player player = Bukkit.getPlayerExact(args[1]);
+            if(player == null)
+            {
+                sender.sendMessage("§6[ApocalypseEvent] §cThis player does not exist or is not online!§r");
+                return true;
+            }
+
+            // Check if an amount was specified, and if so is valid
+            int amount = 1;
+            if(args.length == 3)
+            {
+                try{
+                    amount = Integer.parseInt(args[2]);
+                } catch (NumberFormatException _) {
+                }
+            }
+
+            // Define the phoenix shield item
+            ItemStack phoenixShield = new ItemStack(Material.SHIELD);
+            ItemMeta meta = phoenixShield.getItemMeta();
+            if(meta != null)
+            {
+                meta.setDisplayName("§x§F§F§0§4§0§4§lP§x§F§F§1§7§0§4§lh§x§F§F§2§9§0§3§lo§x§F§F§3§C§0§3§le§x§F§F§4§E§0§3§ln§x§F§F§6§1§0§2§li§x§F§F§7§4§0§2§lx §x§F§F§9§9§0§1§lS§x§F§F§A§B§0§1§lh§x§F§F§B§E§0§1§li§x§F§F§D§0§0§0§le§x§F§F§E§3§0§0§ll§ld§r");
+                meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "phoenix_shield"), PersistentDataType.BOOLEAN, true);
+                meta.addEnchant(Enchantment.FIRE_PROTECTION, 1, false);
+
+                phoenixShield.setItemMeta(meta);
+
+                if(meta instanceof BlockStateMeta)
+                {
+                    BlockStateMeta blockMeta = (BlockStateMeta) phoenixShield.getItemMeta();
+
+                    Banner banner = (Banner) blockMeta.getBlockState();
+                    banner.setBaseColor(DyeColor.ORANGE);
+
+                    banner.addPattern(new Pattern(DyeColor.RED, PatternType.GRADIENT_UP));
+                    banner.addPattern(new Pattern(DyeColor.YELLOW, PatternType.GRADIENT));
+
+                    blockMeta.setBlockState(banner);
+
+                    phoenixShield.setItemMeta(blockMeta);
+                }
+            }
+            phoenixShield.setAmount(amount);
+
+            // Give the player the item
+            player.getInventory().addItem(phoenixShield);
         }
 
         return true;
