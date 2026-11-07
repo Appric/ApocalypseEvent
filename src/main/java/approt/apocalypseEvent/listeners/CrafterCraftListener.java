@@ -27,7 +27,7 @@ public class CrafterCraftListener implements Listener {
             Material material = event.getResult().getType();
             if(plugin.limitedItems.contains(material) || material.name().startsWith("DIAMOND_") || material.name().startsWith("NETHERITE_"))
             {
-                event.setResult(null);
+                event.setCancelled(true);
             }
         }
     }
