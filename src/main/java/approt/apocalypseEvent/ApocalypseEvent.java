@@ -619,9 +619,26 @@ public final class ApocalypseEvent extends JavaPlugin {
         blueberryPieRecipe.setIngredient('Z', new RecipeChoice.MaterialChoice(Tag.ITEMS_EGGS));
         blueberryPieRecipe.setIngredient('A', Material.WHEAT);
 
+        // Define Bright Juice item
+        ItemStack brightJuice = new ItemStack(Material.POTION);
+        meta = (PotionMeta)brightJuice.getItemMeta();
+        if(meta != null) {
+            meta.setDisplayName("§eBright Juice");
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.GLOWING, juiceDuration * 20, 0, false),false);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.SPEED, juiceDuration * 20, 0, false),false);
+            brightJuice.setItemMeta(meta);
+        }
+
+        // Bright Juice recipe
+        ShapedRecipe brightJuiceRecipe = new ShapedRecipe(new NamespacedKey(this, "bright_juice"), brightJuice);
+        brightJuiceRecipe.shape("XXX", "XYX", "XXX");
+        brightJuiceRecipe.setIngredient('X', Material.GLOW_BERRIES);
+        brightJuiceRecipe.setIngredient('Y', new RecipeChoice.ExactChoice(waterBottle));
+
         // Register the recipes
         Bukkit.addRecipe(coolJuiceRecipe);
         Bukkit.addRecipe(sweetJuiceRecipe);
+        Bukkit.addRecipe(brightJuiceRecipe);
         Bukkit.addRecipe(infectedArrowRecipe);
         Bukkit.addRecipe(blueberryPieRecipe);
     }
