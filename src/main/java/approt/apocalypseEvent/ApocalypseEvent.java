@@ -68,6 +68,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public Boolean keepHunger;
     public Boolean broadcastMessages;
     public Boolean limitItems;
+    public Boolean convertGivesHP;
     public Biome treatBiome;
     public List<Material> undriedBlocks = new ArrayList<>();
     public List<Material> fragileBlocks = new ArrayList<>();
@@ -83,6 +84,7 @@ public final class ApocalypseEvent extends JavaPlugin {
     public HashMap<UUID, Location> newRespawn = new HashMap<>();
     public HashMap<UUID, Integer> lastHunger = new HashMap<>();
     public HashMap<UUID, Location> phoenixRespawn = new HashMap<>();
+    public HashMap<UUID, Player> infectionCulprit = new HashMap<>();
 
     // List of fire related damage types
     public List<DamageType> fireDamageTypes = new ArrayList<>(List.of(DamageType.IN_FIRE, DamageType.ON_FIRE, DamageType.CAMPFIRE, DamageType.LAVA, DamageType.FIREBALL, DamageType.UNATTRIBUTED_FIREBALL, DamageType.DRY_OUT, DamageType.HOT_FLOOR, DamageType.SULFUR_CUBE_HOT));
@@ -184,6 +186,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         keepHunger = getConfig().getBoolean("keep-hunger", true);
         broadcastMessages = getConfig().getBoolean("broadcast-messages", true);
         limitItems = getConfig().getBoolean("limit-items", true);
+        convertGivesHP = getConfig().getBoolean("convert-gives-hp", true);
 
         // Converts material names to materials and puts them in the undriedBlocks list
         undriedBlocks.clear();

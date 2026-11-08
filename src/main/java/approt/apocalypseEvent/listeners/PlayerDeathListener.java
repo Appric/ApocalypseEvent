@@ -178,6 +178,12 @@ public class PlayerDeathListener implements Listener {
             // Sets the player's score
             int count = objective.getScore(player.getName()).getScore();
             objective.getScore(player.getName()).setScore(count + 1);
+
+            // Checks if a player killed to add culprit status
+            if(killer != null && Objects.equals(killer.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true))
+            {
+                plugin.infectionCulprit.put(player.getUniqueId(), killer);
+            }
         }
     }
 }

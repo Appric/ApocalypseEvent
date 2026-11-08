@@ -54,6 +54,7 @@ remedy-immunizes: true # Sets whether the remedy item will make not infected pla
 infected-inflict-effect: true # Sets whether infected players give the wither effect with their attacks
 inflict-hands-only: false # Sets whether inflicting the effect can only be done with no item in their main hand
 inflict-duration: 10 # The amount of time in seconds the player will receive the inflicted effect
+convert-gives-hp: true # Sets whether converting another player causes the causing player to gain an extra heart
 
 custom-recipes: true # Sets whether to use the custom recipes
 juice-duration: 60 # Sets the amount of seconds the juice effects last

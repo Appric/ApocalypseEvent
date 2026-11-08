@@ -110,6 +110,21 @@ public class InfectionFunctions {
             if (attribute != null)
                 attribute.setBaseValue(attribute.getDefaultValue() - plugin.lessInfectedHealth);
         }
+
+        // Checks if there was a culprit
+        if(plugin.convertGivesHP && plugin.infectionCulprit.containsKey(player.getUniqueId()))
+        {
+            Player killer = plugin.infectionCulprit.get(player.getUniqueId());
+
+            if(killer != null && killer.isOnline()) {
+                AttributeInstance attribute = killer.getAttribute(Attribute.MAX_HEALTH);
+                if (attribute != null) {
+                    if(attribute.getBaseValue() + 2 < 40)
+                        attribute.setBaseValue(attribute.getBaseValue() + 2);
+                    plugin.infectionCulprit.remove(player.getUniqueId());
+                }
+            }
+        }
     }
 
     public void CureInfected(Player player)
@@ -165,6 +180,9 @@ public class InfectionFunctions {
         // Clear infected effects
         player.removePotionEffect(PotionEffectType.SLOWNESS);
         player.removePotionEffect(PotionEffectType.HUNGER);
+
+        // Remove any culprit
+        plugin.infectionCulprit.remove(player.getUniqueId());
     }
 
     public void ApplyInfectedEffects(Player player)
