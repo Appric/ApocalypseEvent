@@ -137,6 +137,7 @@ public final class ApocalypseEvent extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemMoveListener(this), this);
         getServer().getPluginManager().registerEvents(new CrafterCraftListener(this), this);
         getServer().getPluginManager().registerEvents(new ItemPickupListener(this), this);
+        getServer().getPluginManager().registerEvents(new PrepareAnvilListener(this), this);
 
         // Call function to register the custom recipes
         registerRecipes();
