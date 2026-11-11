@@ -1,6 +1,6 @@
 # ApocalypseEvent
 
-ApocalyspeEvent is a plugin to run the logic and features/mechanics of an apocalypse-themed social civilization experiment in Minecraft.
+ApocalyspeEvent is a Spigot plugin to run the logic and features/mechanics of an apocalypse-themed social civilization experiment in Minecraft.
 
 The original Apocalypse Event using this plugin was an event set in a custom-made cataclysmic post-apocalyptic world primarily made up of sand, sandstone, and cinnabar with only a few patches of life and vegetation. The event was a social civilization experiment where players were tasked with establishing a functioning society in the harsh and altered environment whilst an infection could potentially ravage and corrupt the populace.
 
