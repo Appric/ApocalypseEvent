@@ -9,15 +9,15 @@ Primary features include:
 - **Block Limits** (Certain blocks cannot be mined, or must be placed near similar blocks)
 - **Custom Entity Drops** (Happy Ghasts drop Dried Ghasts)
 - **Custom Death Drops** (Players only drop food, special items, and configurable items on death)
-- **Persistent Hunger** (Hunger doesn't reset when players die if it is above a certain threshhold)
+- **Persistent Hunger** (Hunger only resets to a certain certain threshhold when players die)
 - **Limited Items** (Item tiers like diamond and netherite plus configureable items are unobtainable)
 - **Custom Enchanting System** (Enchanting on armor has been replaced with a system that causes armor trims to give enchantments instead based on input material)
-- **Custom Enchant Effects** (Added custom effects for certain armor enchantments)
+- **Custom Enchant Effects** (Added custom effects/mechanics for certain enchantments on armor)
 - **Altered Weather and Water effects**
 - **Freezing Biomes** (Biomes can be configured to give freezing ticks)
 - **New Heat System** (Factors like armor, depth, exposure to sunlight, and time of day add heat which causes damage after a threshold)
 - **Custom Recipes**
 - **New Custom Items** (Added 3 juice items, a cure, 2 weapons, and a shield with custom effects and abilities)
-- **New Infection/Disease mechanic** (Complete with infection causes, time to infection, potential cure, infection spreading, effects and tracking, conversion buffs, etc)
+- **New Infection/Disease mechanic** (Complete with infection causes, time to infection, potential curing, infection spreading, effects and tracking, conversion buffs, etc)
 - **New Alert command** (Allows players to message admin players and get their attention easily)
 - **Dynamic Admin teams** (Allows multiple teams to be considered an Admin team)
