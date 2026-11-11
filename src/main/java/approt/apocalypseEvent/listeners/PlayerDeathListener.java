@@ -154,8 +154,8 @@ public class PlayerDeathListener implements Listener {
             }
         }
 
-        // Checks if the player is not infected should become infected
-        if(!phoenixSave && Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), false) && (damage == DamageType.WITHER || event.getDamageSource().getCausingEntity() instanceof Husk || (killer != null && Objects.equals(killer.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true))))
+        // Checks if the player is not infected or immune and should become infected
+        if(!phoenixSave && Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), false) && Objects.equals(player.getPersistentDataContainer().get(new NamespacedKey(plugin, "immune"), PersistentDataType.BOOLEAN), false) && (damage == DamageType.WITHER || event.getDamageSource().getCausingEntity() instanceof Husk || (killer != null && Objects.equals(killer.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true))))
         {
             // Get scoreboard details
             Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
