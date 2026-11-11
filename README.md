@@ -2,7 +2,7 @@
 
 ApocalyspeEvent is a plugin to run the logic and features/mechanics of an apocalypse-themed social civilization experiment in Minecraft.
 
-The original Apocalypse Event using this plugin was an event set in a custom-made cataclysmic post-apocalyptic world primarily made up of sand, sandstone, and cinnabar. The event was a social civilization experiment where players were tasked with establishing a functioning society in the harsh and altered environment whilst an infection could potentially ravage and corrupt the populace.
+The original Apocalypse Event using this plugin was an event set in a custom-made cataclysmic post-apocalyptic world primarily made up of sand, sandstone, and cinnabar with only a few patches of life and vegetation. The event was a social civilization experiment where players were tasked with establishing a functioning society in the harsh and altered environment whilst an infection could potentially ravage and corrupt the populace.
 
 Primary features include:
 - **Limited Range Chat Messages** (Only players with a certain distance can see chat and death messages)
