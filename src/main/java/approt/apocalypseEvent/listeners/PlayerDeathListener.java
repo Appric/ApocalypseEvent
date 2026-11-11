@@ -167,22 +167,21 @@ public class PlayerDeathListener implements Listener {
                 plugin.newRespawn.put(player.getUniqueId(), player.getLocation());
             }
 
-            objective = scoreboard.getObjective("infectedPlayers");
-
-            // Creates the objective if it does not exist
-            if(objective == null)
-            {
-                objective = scoreboard.registerNewObjective("infectedPlayers", Criteria.DUMMY, "Gold");
-            }
-
-            // Sets the player's score
-            int count = objective.getScore(player.getName()).getScore();
-            objective.getScore(player.getName()).setScore(count + 1);
-
             // Checks if a player killed to add culprit status
             if(killer != null && Objects.equals(killer.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true))
             {
                 plugin.infectionCulprit.put(player.getUniqueId(), killer);
+                objective = scoreboard.getObjective("infectedPlayers");
+
+                // Creates the objective if it does not exist
+                if(objective == null)
+                {
+                    objective = scoreboard.registerNewObjective("infectedPlayers", Criteria.DUMMY, "Players Infected");
+                }
+
+                // Sets the player's score
+                int count = objective.getScore(killer.getName()).getScore();
+                objective.getScore(killer.getName()).setScore(count + 1);
             }
         }
     }

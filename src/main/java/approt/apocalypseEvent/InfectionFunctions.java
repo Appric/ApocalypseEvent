@@ -58,12 +58,13 @@ public class InfectionFunctions {
         objective.getScore(player.getName()).setScore(plugin.infectTime + additionalTime);
 
 
+        // Keeps track of times infected
         objective = scoreboard.getObjective("timesInfected");
 
         // Creates the objective if it does not exist
         if(objective == null)
         {
-            objective = scoreboard.registerNewObjective("timesInfected", Criteria.DUMMY, "Gold");
+            objective = scoreboard.registerNewObjective("timesInfected", Criteria.DUMMY, "Times Infected");
         }
 
         // Sets the player's score
