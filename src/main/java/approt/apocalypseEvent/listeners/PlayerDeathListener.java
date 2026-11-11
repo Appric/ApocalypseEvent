@@ -171,12 +171,12 @@ public class PlayerDeathListener implements Listener {
             if(killer != null && Objects.equals(killer.getPersistentDataContainer().get(new NamespacedKey(plugin, "infected"), PersistentDataType.BOOLEAN), true))
             {
                 plugin.infectionCulprit.put(player.getUniqueId(), killer);
-                objective = scoreboard.getObjective("infectedPlayers");
+                objective = scoreboard.getObjective("playersInfected");
 
                 // Creates the objective if it does not exist
                 if(objective == null)
                 {
-                    objective = scoreboard.registerNewObjective("infectedPlayers", Criteria.DUMMY, "Players Infected");
+                    objective = scoreboard.registerNewObjective("playersInfected", Criteria.DUMMY, "Players Infected");
                 }
 
                 // Sets the player's score

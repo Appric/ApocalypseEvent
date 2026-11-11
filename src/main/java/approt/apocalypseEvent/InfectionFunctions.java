@@ -124,6 +124,18 @@ public class InfectionFunctions {
                         attribute.setBaseValue(attribute.getBaseValue() + 2);
                     plugin.infectionCulprit.remove(player.getUniqueId());
                 }
+
+                // Keeps track of player converted
+                Objective objective = scoreboard.getObjective("playersConverted");
+
+                // Creates the objective if it does not exist
+                if(objective == null)
+                {
+                    objective = scoreboard.registerNewObjective("playersConverted", Criteria.DUMMY, "Players Converted");
+                }
+
+                // Sets the player's score
+                objective.getScore(killer.getName()).setScore(objective.getScore(killer.getName()).getScore() + 1);
             }
         }
     }
