@@ -39,7 +39,6 @@ public class CommandPreprocessListener implements Listener {
 
         List<String> commandNames = new ArrayList<>(List.of("msg", "tell", "w"));
 
-
         // Checks if the message starts with any of those names
         boolean match = false;
         for (String string : commandNames) {
@@ -49,7 +48,7 @@ public class CommandPreprocessListener implements Listener {
             }
         }
 
-        // If found, check if the player is in range
+        // If found, check if the command/message should be allowed
         if (match) {
             // Checks if the sender is on an admin team
             Team team = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard().getEntryTeam(sender.getName());
@@ -57,11 +56,11 @@ public class CommandPreprocessListener implements Listener {
                 return;
 
             if (message.split(message).length > 1)
-                target = Bukkit.getPlayer(message.split(message)[1]);
+                target = Bukkit.getPlayer(message.split(" ")[1]);
             else
                 return;
 
-            // Checks if the player exists and is online
+            // Checks if the player doesn't exit exists or is offline
             if (target == null || !Bukkit.getOnlinePlayers().contains(target))
                 return;
 
