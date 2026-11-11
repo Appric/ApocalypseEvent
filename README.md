@@ -8,7 +8,7 @@ Primary features include:
 - **Limited Range Chat Messages** (Only players with a certain distance can see chat and death messages)
 - **Block Limits** (Certain blocks cannot be mined, or must be placed near similar blocks)
 - **Custom Entity Drops** (Happy Ghasts drop Dried Ghasts)
-- **Custom Death Drops** (Players drop food, special items, and configureable items only on death)
+- **Custom Death Drops** (Players only drop food, special items, and configurable items on death)
 - **Persistent Hunger** (Hunger doesn't reset when players die if it is above a certain threshhold)
 - **Limited Items** (Item tiers like diamond and netherite plus configureable items are unobtainable)
 - **Custom Enchanting System** (Enchanting on armor has been replaced with a system that causes armor trims to give enchantments instead based on input material)
